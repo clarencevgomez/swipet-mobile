@@ -1,9 +1,12 @@
 import 'package:swipet_mobile/components/router.dart';
+import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:swipet_mobile/pages/login_page.dart';
 import 'package:swipet_mobile/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 

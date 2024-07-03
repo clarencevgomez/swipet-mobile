@@ -24,7 +24,7 @@ class StartButton extends StatelessWidget {
                   WidgetStateProperty.all<Color>(
                       Colors.black),
             ),
-            onPressed: () {},
+            onPressed: onTap,
             child: Center(
               child: Row(
                 mainAxisAlignment:

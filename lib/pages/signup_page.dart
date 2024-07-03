@@ -1,11 +1,15 @@
+import 'package:faker/faker.dart';
+import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart';
 import 'package:swipet_mobile/components/action_footer.dart';
 import 'package:swipet_mobile/components/action_header.dart';
 import 'package:swipet_mobile/components/forgot_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:swipet_mobile/components/start_button.dart';
 import 'package:swipet_mobile/components/text_field.dart';
+import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:swipet_mobile/pages/login_page.dart';
 import 'package:swipet_mobile/components/router.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -32,15 +36,12 @@ class _SignupPageState extends State<SignupPage> {
       TextEditingController();
 
   void signUpUser() {
-    print(
-        "User: ${signUpUsernameController.text}");
-    print("Email: ${signUpEmailController.text}");
-    print(
-        "Location: ${signUpLocationController.text}");
-    print(
-        "Pass1: ${signUpPasswordController.text}");
-    print(
-        "Pass2: ${signUpConfirmPasswordController.text}");
+    debugPrint(signUpUsernameController.text);
+    debugPrint(signUpEmailController.text);
+    debugPrint(signUpLocationController.text);
+    debugPrint(signUpPasswordController.text);
+    debugPrint(
+        signUpConfirmPasswordController.text);
   }
 
   @override
@@ -149,6 +150,31 @@ class _SignupPageState extends State<SignupPage> {
                         .topToBottom()),
                 // RESET PASSWORD PAGE REDIRECTION
                 const ResetPassword(),
+                // JUST A GENERATE DATA BUTTON -> WILL BE DELETED LATER
+                OutlinedButton(
+                    onPressed: () {
+                      _fakeData();
+                    },
+                    child: const Text(
+                      "Generate Data",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
+                ElevatedButton(
+                    onPressed: () {
+                      _newUser(
+                          signUpUsernameController
+                              .text,
+                          signUpEmailController
+                              .text,
+                          signUpLocationController
+                              .text,
+                          signUpConfirmPasswordController
+                              .text);
+                    },
+                    child:
+                        const Text('ADD USER')),
                 const SizedBox(height: 120),
               ],
             ),
@@ -156,5 +182,62 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _newUser(
+      String username,
+      String email,
+      String address,
+      String password) async {
+    var _id = M.ObjectId(); // FOR A UNIQUE ID
+
+    final data = MongoDbModel(
+        id: _id,
+        username: username,
+        email: email,
+        address: address,
+        password: password);
+    await MongoDatabase.addUser(data);
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(
+            content:
+                // ignore: deprecated_member_use
+                Text("inserted ID ${_id.$oid}")));
+    _clearAll();
+  }
+
+  void _clearAll() {
+    signUpUsernameController.text = "";
+
+    signUpEmailController.text = "";
+
+    signUpLocationController.text = "";
+
+    signUpPasswordController.text = "";
+
+    signUpConfirmPasswordController.text = "";
+  }
+
+  // FUNCTIONS TO GENERATE FAKE DATA
+  void _fakeData() {
+    var faker = Faker();
+
+    setState(() {
+      signUpUsernameController.text =
+          faker.internet.userName();
+
+      signUpEmailController.text =
+          faker.internet.email();
+
+      signUpLocationController.text =
+          '${faker.address.streetName()}, ${faker.address.streetAddress()}';
+
+      signUpPasswordController.text =
+          faker.internet.password();
+
+      signUpConfirmPasswordController.text =
+          signUpPasswordController.text;
+    });
   }
 }

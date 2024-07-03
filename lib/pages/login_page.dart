@@ -22,7 +22,16 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController =
       TextEditingController();
 
-  void userLogin() {}
+  void userLogin() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator
+                .adaptive(),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +118,8 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               // Forgot Password Page
-              const ResetPassword()
+              const ResetPassword(),
+              // Debug Output
             ],
           ),
         ),
