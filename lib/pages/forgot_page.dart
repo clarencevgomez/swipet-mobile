@@ -111,7 +111,7 @@ class _ForgotKeyPageState
                 next: Icons
                     .check_circle_outline_sharp,
                 actionText:
-                    'Confirm New Password',
+                    'Confirm New Password*',
                 onTap: forgotPassword,
               ),
             ],
