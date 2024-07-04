@@ -1,11 +1,13 @@
 import 'package:swipet_mobile/components/action_footer.dart';
 import 'package:swipet_mobile/components/action_header.dart';
 import 'package:swipet_mobile/components/forgot_tile.dart';
+import 'package:swipet_mobile/components/my_button.dart';
 import 'package:swipet_mobile/components/router.dart';
-import 'package:swipet_mobile/components/start_button.dart';
 import 'package:swipet_mobile/components/text_field.dart';
+import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:swipet_mobile/pages/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:swipet_mobile/pages/testData/get_data.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,15 +24,35 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController =
       TextEditingController();
 
-  void userLogin() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator
-                .adaptive(),
-          );
-        });
+  Future<void> userLogin(
+      String username, String password) async {
+    String loginResult =
+        await MongoDatabase.loginUser(
+            username, password);
+
+    if (loginResult == "User Found") {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Successful Login!")),
+      );
+      // if successful navigate to swipe screen
+      // ignore: use_build_context_synchronously
+      await ScreenNavigator(cx: context).navigate(
+          const SwipePage(),
+          NavigatorTweens.rightToLeft());
+    } else {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loginResult)),
+      );
+    }
+    _clearAll();
+  }
+
+  void _clearAll() {
+    usernameController.clear();
+    passwordController.clear();
   }
 
   @override
@@ -98,11 +120,15 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
               // --> login button
-              StartButton(
-                onTap: userLogin,
-                next: Icons.app_shortcut,
-                actionText: 'Log In',
+              MyButton(
+                onPressed: () {
+                  userLogin(
+                      usernameController.text,
+                      passwordController.text);
+                },
+                actionText: 'Login',
               ),
+
               // --- BELOW ACTION BUTTON
               Row(
                 mainAxisAlignment:

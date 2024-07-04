@@ -3,6 +3,7 @@ import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:swipet_mobile/pages/login_page.dart';
 import 'package:swipet_mobile/pages/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:swipet_mobile/pages/testData/get_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,8 @@ class _MyAppState extends State<MyApp> {
             const SignupPage(),
         '/login': (BuildContext context) =>
             const LoginPage(),
+        '/swipepage': (BuildContext context) =>
+            const SwipePage(),
       },
       theme: ThemeData(
           fontFamily: 'DM Sans',

@@ -24,7 +24,8 @@ class _ForgotKeyPageState
   final confirmPasswordController =
       TextEditingController();
 
-  void forgotPassword() {
+  Future<void> forgotPassword(String hey) async {
+    return;
     // Implement your forgot password logic here
     // You can access the text field values using the controller instances
   }
@@ -112,7 +113,7 @@ class _ForgotKeyPageState
                     .check_circle_outline_sharp,
                 actionText:
                     'Confirm New Password*',
-                onTap: forgotPassword,
+                onTap: forgotPassword('hey'),
               ),
             ],
           ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class StartButton extends StatelessWidget {
   final IconData next;
   final String actionText;
-  final Function()? onTap;
+  final Future<void>? onTap;
 
   const StartButton(
       {super.key,
@@ -14,7 +14,9 @@ class StartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        onTap;
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: 45, vertical: 15),
@@ -24,7 +26,9 @@ class StartButton extends StatelessWidget {
                   WidgetStateProperty.all<Color>(
                       Colors.black),
             ),
-            onPressed: onTap,
+            onPressed: () {
+              onTap;
+            },
             child: Center(
               child: Row(
                 mainAxisAlignment:

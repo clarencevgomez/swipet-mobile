@@ -1,11 +1,11 @@
 import 'package:faker/faker.dart';
+import 'package:flutter/material.dart';
 import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart';
 import 'package:swipet_mobile/components/action_footer.dart';
 import 'package:swipet_mobile/components/action_header.dart';
 import 'package:swipet_mobile/components/forgot_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:swipet_mobile/components/start_button.dart';
 import 'package:swipet_mobile/components/text_field.dart';
+import 'package:swipet_mobile/components/my_button.dart'; // Import the new component
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:swipet_mobile/pages/login_page.dart';
 import 'package:swipet_mobile/components/router.dart';
@@ -22,26 +22,46 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final signUpUsernameController =
       TextEditingController();
-
   final signUpEmailController =
       TextEditingController();
-
   final signUpLocationController =
       TextEditingController();
-
   final signUpPasswordController =
       TextEditingController();
-
   final signUpConfirmPasswordController =
       TextEditingController();
 
-  void signUpUser() {
-    debugPrint(signUpUsernameController.text);
-    debugPrint(signUpEmailController.text);
-    debugPrint(signUpLocationController.text);
-    debugPrint(signUpPasswordController.text);
-    debugPrint(
-        signUpConfirmPasswordController.text);
+  // NEW USER FUNCTION
+  Future<void> _newUser(
+      String username,
+      String email,
+      String address,
+      String password) async {
+    var _id = M.ObjectId(); // FOR A UNIQUE ID
+
+    final data = MongoDbModel(
+        id: _id,
+        username: username,
+        email: email,
+        address: address,
+        password: password);
+    await MongoDatabase.addUser(data);
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                // ignore: deprecated_member_use
+                Text(
+                    "inserted->\n\tID: ${_id.$oid}\nUsername: ${username}")));
+    _clearAll();
+  }
+
+  void _clearAll() {
+    signUpUsernameController.clear();
+    signUpEmailController.clear();
+    signUpLocationController.clear();
+    signUpPasswordController.clear();
+    signUpConfirmPasswordController.clear();
   }
 
   @override
@@ -81,16 +101,14 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               children: [
                 const SizedBox(height: 175),
-                // Sign Up Header
                 const ActionHeader(
-                    imagePath:
-                        'lib/images/sign-upp-cat.png',
-                    actionText: "Sign Up"),
+                  imagePath:
+                      'lib/images/sign-upp-cat.png',
+                  actionText: "Sign Up",
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                       top: 30),
-
-                  // Username Input Field
                   child: MyTextField(
                     next: Icons.person_outline,
                     placeholder: 'Username*',
@@ -99,7 +117,6 @@ class _SignupPageState extends State<SignupPage> {
                     obscureText: false,
                   ),
                 ),
-                // Username Email Field
                 MyTextField(
                   next:
                       Icons.alternate_email_sharp,
@@ -108,7 +125,6 @@ class _SignupPageState extends State<SignupPage> {
                       signUpEmailController,
                   obscureText: false,
                 ),
-                // Location Input Field
                 MyTextField(
                   next:
                       Icons.location_on_outlined,
@@ -117,7 +133,6 @@ class _SignupPageState extends State<SignupPage> {
                       signUpLocationController,
                   obscureText: false,
                 ),
-                // Password Input Field
                 MyTextField(
                   next: Icons.lock_open_outlined,
                   placeholder: 'Password*',
@@ -125,7 +140,6 @@ class _SignupPageState extends State<SignupPage> {
                       signUpPasswordController,
                   obscureText: true,
                 ),
-                // Confirm Password Input Field
                 MyTextField(
                   next: Icons.lock_outline,
                   placeholder:
@@ -134,47 +148,37 @@ class _SignupPageState extends State<SignupPage> {
                       signUpConfirmPasswordController,
                   obscureText: true,
                 ),
-                StartButton(
-                  next: Icons.app_shortcut,
+                MyButton(
+                  onPressed: () {
+                    _newUser(
+                      signUpUsernameController
+                          .text,
+                      signUpEmailController.text,
+                      signUpLocationController
+                          .text,
+                      signUpConfirmPasswordController
+                          .text,
+                    );
+                  },
                   actionText: 'Sign Up',
-                  onTap: signUpUser,
                 ),
-
-                // Log In Redirection
                 ActionFooter(
-                    page: const LoginPage(),
-                    description:
-                        "Have an Account?\t",
-                    actionText: "Login",
-                    animation: NavigatorTweens
-                        .topToBottom()),
-                // RESET PASSWORD PAGE REDIRECTION
+                  page: const LoginPage(),
+                  description:
+                      "Have an Account?\t",
+                  actionText: "Login",
+                  animation: NavigatorTweens
+                      .topToBottom(),
+                ),
                 const ResetPassword(),
-                // JUST A GENERATE DATA BUTTON -> WILL BE DELETED LATER
                 OutlinedButton(
-                    onPressed: () {
-                      _fakeData();
-                    },
-                    child: const Text(
-                      "Generate Data",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                ElevatedButton(
-                    onPressed: () {
-                      _newUser(
-                          signUpUsernameController
-                              .text,
-                          signUpEmailController
-                              .text,
-                          signUpLocationController
-                              .text,
-                          signUpConfirmPasswordController
-                              .text);
-                    },
-                    child:
-                        const Text('ADD USER')),
+                  onPressed: _fakeData,
+                  child: const Text(
+                    "Generate Data",
+                    style: TextStyle(
+                        color: Colors.black),
+                  ),
+                ),
                 const SizedBox(height: 120),
               ],
             ),
@@ -184,60 +188,18 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Future<void> _newUser(
-      String username,
-      String email,
-      String address,
-      String password) async {
-    var _id = M.ObjectId(); // FOR A UNIQUE ID
-
-    final data = MongoDbModel(
-        id: _id,
-        username: username,
-        email: email,
-        address: address,
-        password: password);
-    await MongoDatabase.addUser(data);
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(
-            content:
-                // ignore: deprecated_member_use
-                Text("inserted ID ${_id.$oid}")));
-    _clearAll();
-  }
-
-  void _clearAll() {
-    signUpUsernameController.text = "";
-
-    signUpEmailController.text = "";
-
-    signUpLocationController.text = "";
-
-    signUpPasswordController.text = "";
-
-    signUpConfirmPasswordController.text = "";
-  }
-
-  // FUNCTIONS TO GENERATE FAKE DATA
   void _fakeData() {
     var faker = Faker();
 
-    setState(() {
-      signUpUsernameController.text =
-          faker.internet.userName();
-
-      signUpEmailController.text =
-          faker.internet.email();
-
-      signUpLocationController.text =
-          '${faker.address.streetName()}, ${faker.address.streetAddress()}';
-
-      signUpPasswordController.text =
-          faker.internet.password();
-
-      signUpConfirmPasswordController.text =
-          signUpPasswordController.text;
-    });
+    signUpUsernameController.text =
+        faker.internet.userName();
+    signUpEmailController.text =
+        faker.internet.email();
+    signUpLocationController.text =
+        '${faker.address.streetName()}, ${faker.address.streetAddress()}';
+    signUpPasswordController.text =
+        faker.internet.password();
+    signUpConfirmPasswordController.text =
+        signUpPasswordController.text;
   }
 }

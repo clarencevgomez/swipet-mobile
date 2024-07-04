@@ -6,3 +6,4 @@ const MONGO_CONN_URL =
 const USER_COLLECTION =
     "Users"; // OUR COLLECtION NAME IS USERS
 
+const PET_COLLECTION = "Pets";
