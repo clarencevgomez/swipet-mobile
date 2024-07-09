@@ -30,9 +30,15 @@ class _SignupPageState extends State<SignupPage> {
       TextEditingController();
   final signUpConfirmPasswordController =
       TextEditingController();
+  final firstNameController =
+      TextEditingController();
+  final lastNameController =
+      TextEditingController();
 
   // NEW USER FUNCTION
   Future<void> _newUser(
+      String firstName,
+      String lastName,
       String username,
       String email,
       String address,
@@ -41,6 +47,8 @@ class _SignupPageState extends State<SignupPage> {
 
     final data = MongoDbModel(
         id: _id,
+        firstName: firstName,
+        lastName: lastName,
         username: username,
         email: email,
         address: address,
@@ -57,6 +65,8 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void _clearAll() {
+    firstNameController.clear();
+    lastNameController.clear();
     signUpUsernameController.clear();
     signUpEmailController.clear();
     signUpLocationController.clear();
@@ -110,13 +120,31 @@ class _SignupPageState extends State<SignupPage> {
                   padding: const EdgeInsets.only(
                       top: 30),
                   child: MyTextField(
-                    next: Icons.person_outline,
-                    placeholder: 'Username*',
-                    controller:
-                        signUpUsernameController,
-                    obscureText: false,
-                  ),
+                      next: Icons
+                          .camera_front_rounded,
+                      placeholder: "First Name*",
+                      controller:
+                          firstNameController,
+                      obscureText: false),
                 ),
+
+                // Last Name Controller
+                MyTextField(
+                    next: Icons
+                        .video_camera_front_outlined,
+                    placeholder: "Last Name*",
+                    controller:
+                        lastNameController,
+                    obscureText: false),
+                MyTextField(
+                  next: Icons.person_outline,
+                  placeholder: 'Username*',
+                  controller:
+                      signUpUsernameController,
+                  obscureText: false,
+                ),
+                // First Name Input Controller
+
                 MyTextField(
                   next:
                       Icons.alternate_email_sharp,
@@ -151,6 +179,8 @@ class _SignupPageState extends State<SignupPage> {
                 MyButton(
                   onPressed: () {
                     _newUser(
+                      firstNameController.text,
+                      lastNameController.text,
                       signUpUsernameController
                           .text,
                       signUpEmailController.text,
@@ -190,7 +220,10 @@ class _SignupPageState extends State<SignupPage> {
 
   void _fakeData() {
     var faker = Faker();
-
+    firstNameController.text =
+        faker.person.firstName();
+    lastNameController.text =
+        faker.person.lastName();
     signUpUsernameController.text =
         faker.internet.userName();
     signUpEmailController.text =

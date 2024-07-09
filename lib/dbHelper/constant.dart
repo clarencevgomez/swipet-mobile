@@ -2,8 +2,9 @@
 // password = "2ya70gCeqqieNhSO"
 
 const MONGO_CONN_URL =
-    "mongodb+srv://test_user:2ya70gCeqqieNhSO@cluster0.sh91vxf.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://RIckL:COP4331@cluster0.th0kslw.mongodb.net/swiPet?retryWrites=true&w=majority&appName=Cluster0";
+// "mongodb+srv://test_user:2ya70gCeqqieNhSO@cluster0.sh91vxf.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0";
 const USER_COLLECTION =
-    "Users"; // OUR COLLECtION NAME IS USERS
+    "User"; // OUR COLLECtION NAME IS USERS
 
-const PET_COLLECTION = "Pets";
+const PET_COLLECTION = "Pet";
