@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swipet_mobile/components/router.dart';
 
 class ActionFooter extends StatelessWidget {
-  final Widget page;
+  final String page;
   final String description;
   final String actionText;
   final Tween<Offset> animation;
@@ -29,7 +29,8 @@ class ActionFooter extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.of(context).pop();
+            Navigator.of(context)
+                .pop(); // Close the current screen/dialog
             ScreenNavigator(cx: context).navigate(
               page,
               animation,

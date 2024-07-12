@@ -5,9 +5,7 @@ import 'package:swipet_mobile/components/my_button.dart';
 import 'package:swipet_mobile/components/router.dart';
 import 'package:swipet_mobile/components/text_field.dart';
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
-import 'package:swipet_mobile/pages/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'package:swipet_mobile/pages/user_pages/swipe_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -38,8 +36,8 @@ class _LoginPageState extends State<LoginPage> {
       );
       // if successful navigate to swipe screen
       // ignore: use_build_context_synchronously
-      await ScreenNavigator(cx: context).navigate(
-          const SwipePage(),
+      ScreenNavigator(cx: context).navigate(
+          '/swipepage',
           NavigatorTweens.rightToLeft());
     } else {
       // ignore: use_build_context_synchronously
@@ -135,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                     MainAxisAlignment.center,
                 children: [
                   ActionFooter(
-                      page: const SignupPage(),
+                      page: '/signup',
                       description:
                           "Need an Account?\t",
                       actionText: "Sign Up",

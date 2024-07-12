@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart'; // Import your MongoDBModel
+import 'package:swipet_mobile/components/my_bottom_bar.dart';
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
-import 'package:swipet_mobile/pages/user_pages/favorite_page.dart'; // Import your MongoDatabaseImport your HomePage
+import 'package:appinio_swiper/appinio_swiper.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({super.key});
@@ -12,22 +13,9 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  late ScrollController _scrollController;
+  bool _hasReachedEnd = false;
+
   int _selectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    print("ScrollController initialized");
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -37,7 +25,10 @@ class _SwipePageState extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Swipet"),
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -62,62 +53,48 @@ class _SwipePageState extends State<SwipePage> {
                 var totalData =
                     snapshot.data!.length;
                 print('Total Data: $totalData');
-                return Stack(
+                return Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center,
                   children: [
-                    SingleChildScrollView(
-                      controller:
-                          _scrollController,
-                      scrollDirection:
-                          Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                            totalData, (index) {
-                          return displayAnimalCard(
-                            AnimalModel.fromJson(
-                                snapshot.data![
-                                    index]),
-                          );
-                        }),
-                      ),
-                    ),
-                    Align(
-                      alignment:
-                          Alignment.bottomLeft,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.all(
-                                16.0),
-                        child:
-                            FloatingActionButton(
-                          onPressed: () {
-                            if (_scrollController
-                                    .position
-                                    .pixels <
-                                _scrollController
-                                    .position
-                                    .maxScrollExtent) {
-                              _scrollController
-                                  .animateTo(
-                                _scrollController
-                                        .position
-                                        .pixels +
-                                    MediaQuery.of(
-                                            context)
-                                        .size
-                                        .width,
-                                duration: Duration(
-                                    milliseconds:
-                                        300),
-                                curve:
-                                    Curves.easeIn,
-                              );
-                            }
+                    if (!_hasReachedEnd)
+                      Expanded(
+                        child: AppinioSwiper(
+                          cardCount: totalData,
+                          cardBuilder:
+                              (BuildContext
+                                      context,
+                                  int index) {
+                            var animalModel =
+                                AnimalModel.fromJson(
+                                    snapshot.data![
+                                        index]);
+                            return displayAnimalCard(
+                                animalModel);
                           },
-                          child:
-                              Icon(Icons.close),
+                          onEnd: () {
+                            setState(() {
+                              _hasReachedEnd =
+                                  true;
+                            });
+                          },
+                        ),
+                      )
+                    else
+                      const Center(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.all(8.0),
+                          child: Text(
+                            "You've reached the end!",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight:
+                                    FontWeight
+                                        .bold),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 );
               } else {
@@ -130,38 +107,15 @@ class _SwipePageState extends State<SwipePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+      bottomNavigationBar: MyBottomNavBar(
         onTap: _onItemTapped,
+        currIndex: _selectedIndex,
       ),
     );
   }
 
   Widget displayAnimalCard(AnimalModel data) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Card(
         child: Padding(
@@ -190,7 +144,7 @@ class _SwipePageState extends State<SwipePage> {
                     'Pet ID: ${isEmpty(data.petId)}'),
                 Text(
                     'Pet Size: ${isEmpty(data.petSize)}'),
-                Text('Pet Images:'),
+                const Text('Pet Images:'),
                 for (var image in data.petImages)
                   Image.network(image,
                       height: 100, width: 100),
@@ -202,32 +156,32 @@ class _SwipePageState extends State<SwipePage> {
     );
   }
 
-  Widget displayUserCard(MongoDbModel data) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                    'Username: ${isEmpty(data.username)}'),
-                Text(
-                    'Email: ${isEmpty(data.email)}'),
-                Text(
-                    'Address: ${isEmpty(data.address)}'),
-                Text(
-                    'Password: ${isEmpty(data.password)}'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget displayUserCard(MongoDbModel data) {
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width,
+  //     child: Card(
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(15.0),
+  //         child: SingleChildScrollView(
+  //           child: Column(
+  //             crossAxisAlignment:
+  //                 CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                   'Username: ${isEmpty(data.username)}'),
+  //               Text(
+  //                   'Email: ${isEmpty(data.email)}'),
+  //               Text(
+  //                   'Address: ${isEmpty(data.address)}'),
+  //               Text(
+  //                   'Password: ${isEmpty(data.password)}'),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 String isEmpty(String? data) {

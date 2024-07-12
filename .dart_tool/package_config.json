@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "appinio_swiper",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/appinio_swiper-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "args",
       "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/args-2.5.0",
       "packageUri": "lib/",
@@ -386,7 +392,7 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2024-07-09T16:32:51.163887Z",
+  "generated": "2024-07-12T01:23:41.138181Z",
   "generator": "pub",
   "generatorVersion": "3.4.3",
   "flutterRoot": "file:///Users/clarencegomez/flutter",

@@ -1,6 +1,5 @@
 import 'package:swipet_mobile/components/action_header.dart';
 import 'package:swipet_mobile/components/router.dart';
-import 'package:swipet_mobile/main.dart';
 import 'package:flutter/material.dart';
 import 'package:swipet_mobile/components/start_button.dart';
 import 'package:swipet_mobile/components/text_field.dart';
@@ -47,7 +46,7 @@ class _ForgotKeyPageState
               Navigator.of(context).pop();
               ScreenNavigator(cx: context)
                   .navigate(
-                const WelcomePage(),
+                '/welcomepage',
                 NavigatorTweens.rightToLeft(),
               );
             },

@@ -1,5 +1,4 @@
 import 'package:swipet_mobile/components/router.dart';
-import 'package:swipet_mobile/pages/forgot_page.dart';
 import 'package:flutter/material.dart';
 
 class ResetPassword extends StatelessWidget {
@@ -27,7 +26,7 @@ class ResetPassword extends StatelessWidget {
                   Navigator.of(context).pop();
                   ScreenNavigator(cx: context)
                       .navigate(
-                    const ForgotKeyPage(),
+                    '/forgotpage',
                     NavigatorTweens.bottomToTop(),
                   );
                 },

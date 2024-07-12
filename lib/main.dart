@@ -1,8 +1,14 @@
 import 'package:swipet_mobile/components/router.dart';
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
+import 'package:swipet_mobile/pages/auth_page.dart';
+import 'package:swipet_mobile/pages/forgot_page.dart';
 import 'package:swipet_mobile/pages/login_page.dart';
 import 'package:swipet_mobile/pages/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:swipet_mobile/pages/user_pages/explore_page.dart';
+import 'package:swipet_mobile/pages/user_pages/favorite_page.dart';
+import 'package:swipet_mobile/pages/user_pages/inquiry_page.dart';
+import 'package:swipet_mobile/pages/user_pages/profile_page.dart';
 import 'package:swipet_mobile/pages/user_pages/swipe_page.dart';
 
 void main() async {
@@ -30,8 +36,20 @@ class _MyAppState extends State<MyApp> {
             const SignupPage(),
         '/login': (BuildContext context) =>
             const LoginPage(),
+        '/forgotpage': (BuildContext context) =>
+            const ForgotKeyPage(),
         '/swipepage': (BuildContext context) =>
             const SwipePage(),
+        '/explorepage': (BuildContext context) =>
+            const ExplorePage(),
+        '/favoritepage': (BuildContext context) =>
+            const FavoritePage(),
+        '/inquiry': (BuildContext context) =>
+            const InquiryPage(),
+        '/profilepage': (BuildContext context) =>
+            const ProfilePage(),
+        '/authpage': (BuildContext context) =>
+            const AuthPage(),
       },
       theme: ThemeData(
           fontFamily: 'DM Sans',
@@ -112,7 +130,7 @@ class _WelcomePageState
                     onPressed: () {
                       ScreenNavigator(cx: context)
                           .navigate(
-                              const SignupPage(),
+                              '/signup',
                               NavigatorTweens
                                   .bottomToTop());
                     },

@@ -4,10 +4,10 @@ import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart';
 import 'package:swipet_mobile/components/action_footer.dart';
 import 'package:swipet_mobile/components/action_header.dart';
 import 'package:swipet_mobile/components/forgot_tile.dart';
+import 'package:swipet_mobile/components/name_text_field.dart';
 import 'package:swipet_mobile/components/text_field.dart';
 import 'package:swipet_mobile/components/my_button.dart'; // Import the new component
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
-import 'package:swipet_mobile/pages/login_page.dart';
 import 'package:swipet_mobile/components/router.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 
@@ -43,10 +43,10 @@ class _SignupPageState extends State<SignupPage> {
       String email,
       String address,
       String password) async {
-    var _id = M.ObjectId(); // FOR A UNIQUE ID
+    var id = M.ObjectId(); // FOR A UNIQUE ID
 
     final data = MongoDbModel(
-        id: _id,
+        id: id,
         firstName: firstName,
         lastName: lastName,
         username: username,
@@ -60,7 +60,7 @@ class _SignupPageState extends State<SignupPage> {
             content:
                 // ignore: deprecated_member_use
                 Text(
-                    "inserted->\n\tID: ${_id.$oid}\nUsername: ${username}")));
+                    "inserted->\n\tID: ${id.$oid}\nUsername: $username")));
     _clearAll();
   }
 
@@ -119,23 +119,47 @@ class _SignupPageState extends State<SignupPage> {
                 Padding(
                   padding: const EdgeInsets.only(
                       top: 30),
-                  child: MyTextField(
-                      next: Icons
-                          .camera_front_rounded,
-                      placeholder: "First Name*",
-                      controller:
-                          firstNameController,
-                      obscureText: false),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets
+                                  .only(
+                                  left: 50,
+                                  right: 5),
+                          child: NameTextField(
+                            next: Icons
+                                .camera_front_rounded,
+                            placeholder:
+                                "First Name*",
+                            controller:
+                                firstNameController,
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets
+                                  .only(
+                                  right: 50),
+                          child: NameTextField(
+                            next: Icons
+                                .video_camera_front_outlined,
+                            placeholder:
+                                "Last Name*",
+                            controller:
+                                lastNameController,
+                            obscureText: false,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
-                // Last Name Controller
-                MyTextField(
-                    next: Icons
-                        .video_camera_front_outlined,
-                    placeholder: "Last Name*",
-                    controller:
-                        lastNameController,
-                    obscureText: false),
                 MyTextField(
                   next: Icons.person_outline,
                   placeholder: 'Username*',
@@ -193,7 +217,7 @@ class _SignupPageState extends State<SignupPage> {
                   actionText: 'Sign Up',
                 ),
                 ActionFooter(
-                  page: const LoginPage(),
+                  page: '/login',
                   description:
                       "Have an Account?\t",
                   actionText: "Login",
