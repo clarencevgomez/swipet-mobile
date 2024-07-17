@@ -11,7 +11,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState
     extends State<ExplorePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {

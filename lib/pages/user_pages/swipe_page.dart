@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart'; // Import your MongoDBModel
+import 'package:swipet_mobile/components/animal_card.dart';
 import 'package:swipet_mobile/components/my_bottom_bar.dart';
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -26,8 +28,27 @@ class _SwipePageState extends State<SwipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Swipet"),
+        toolbarHeight: 80,
+        leading: Padding(
+          padding:
+              const EdgeInsets.only(left: 25.0),
+          child: SvgPicture.asset(
+            'lib/assets/swipet.svg',
+            colorFilter: const ColorFilter.mode(
+              Colors.black,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          "SwiPet",
+          style: TextStyle(
+            fontSize: 24,
+          ),
+        ),
         automaticallyImplyLeading: false,
+        titleSpacing: 5,
       ),
       body: SafeArea(
         child: Padding(
@@ -69,8 +90,9 @@ class _SwipePageState extends State<SwipePage> {
                                 AnimalModel.fromJson(
                                     snapshot.data![
                                         index]);
-                            return displayAnimalCard(
-                                animalModel);
+                            return AnimalCard(
+                                data:
+                                    animalModel);
                           },
                           onEnd: () {
                             setState(() {
@@ -113,77 +135,4 @@ class _SwipePageState extends State<SwipePage> {
       ),
     );
   }
-
-  Widget displayAnimalCard(AnimalModel data) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                    'Animal Type: ${isEmpty(data.animalType)}'),
-                Text('Bio: ${isEmpty(data.bio)}'),
-                Text(
-                    'Breed: ${isEmpty(data.breed)}'),
-                Text(
-                    'Contact Email: ${isEmpty(data.contactEmail)}'),
-                Text(
-                    'Location: ${isEmpty(data.location)}'),
-                Text(
-                    'Pet Age: ${isEmpty(data.petAge)}'),
-                Text(
-                    'Pet Name: ${isEmpty(data.petName)}'),
-                Text(
-                    'Gender: ${isEmpty(data.gender)}'),
-                Text(
-                    'Pet ID: ${isEmpty(data.petId)}'),
-                Text(
-                    'Pet Size: ${isEmpty(data.petSize)}'),
-                const Text('Pet Images:'),
-                for (var image in data.petImages)
-                  Image.network(image,
-                      height: 100, width: 100),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Widget displayUserCard(MongoDbModel data) {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width,
-  //     child: Card(
-  //       child: Padding(
-  //         padding: const EdgeInsets.all(15.0),
-  //         child: SingleChildScrollView(
-  //           child: Column(
-  //             crossAxisAlignment:
-  //                 CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                   'Username: ${isEmpty(data.username)}'),
-  //               Text(
-  //                   'Email: ${isEmpty(data.email)}'),
-  //               Text(
-  //                   'Address: ${isEmpty(data.address)}'),
-  //               Text(
-  //                   'Password: ${isEmpty(data.password)}'),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-}
-
-String isEmpty(String? data) {
-  return data == null || data.isEmpty ? "" : data;
 }

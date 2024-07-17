@@ -52,6 +52,7 @@ class _MyAppState extends State<MyApp> {
             const AuthPage(),
       },
       theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
           fontFamily: 'DM Sans',
           primaryColor: Colors.black),
       debugShowCheckedModeBanner: false,

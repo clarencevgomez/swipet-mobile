@@ -1,6 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:swipet_mobile/components/bottom_navbar_item.dart'; // Import your updated BottomNavItem class
+import 'package:flutter_svg/flutter_svg.dart';
+
+class BottomNavItem {
+  final String svgAsset;
+  final String label;
+  final String page;
+  final double size;
+  final Color selectedColor;
+  final Color unselectedColor;
+
+  BottomNavItem({
+    required this.svgAsset,
+    required this.label,
+    required this.page,
+    required this.size,
+    required this.selectedColor,
+    required this.unselectedColor,
+  });
+
+  BottomNavigationBarItem build(bool isSelected) {
+    return BottomNavigationBarItem(
+      icon: SvgPicture.asset(
+        svgAsset,
+        width: size,
+        height: size,
+        colorFilter: ColorFilter.mode(
+          isSelected
+              ? selectedColor
+              : unselectedColor,
+          BlendMode.srcIn,
+        ),
+      ),
+      label: label,
+    );
+  }
+}
 
 class MyBottomNavBar extends StatelessWidget {
   final Function(int) onTap;
@@ -17,52 +51,55 @@ class MyBottomNavBar extends StatelessWidget {
     // List of BottomNavItem instances
     final List<BottomNavItem> navItems = [
       BottomNavItem(
-        icon: SvgPicture.asset(
-          'lib/assets/swipet-nav-item.svg',
-          height: 28,
-          width: 28,
-        ),
         label: 'Swipe',
         page: '/swipepage',
+        size: 30,
+        svgAsset: 'lib/assets/swipet.svg',
+        selectedColor: const Color.fromRGBO(
+            242, 145, 163, 1),
+        unselectedColor: Colors.white30,
       ),
       BottomNavItem(
-        icon: SvgPicture.asset(
-          'lib/assets/find.svg',
-          height: 28,
-          width: 28,
-        ),
         label: 'Explore',
         page: '/explorepage',
+        size: 30,
+        svgAsset:
+            'lib/assets/search-heart-fill.svg',
+        selectedColor: Colors.white,
+        unselectedColor: Colors.white30,
       ),
       BottomNavItem(
-        icon: SvgPicture.asset(
-          'lib/assets/favorites-page.svg',
-          height: 28,
-          width: 28,
-        ),
         label: 'Favorites',
         page: '/favoritepage',
+        size: 30,
+        svgAsset: 'lib/assets/hearts.svg',
+        selectedColor: Colors.white,
+        unselectedColor: Colors.white30,
       ),
       BottomNavItem(
-        icon: SvgPicture.asset(
-          'lib/assets/inquiry.svg',
-          height: 28,
-          width: 28,
-        ),
         label: 'Inquiry',
         page: '/inquiry',
+        size: 30,
+        svgAsset: 'lib/assets/heart-mail.svg',
+        selectedColor: Colors.white,
+        unselectedColor: Colors.white30,
       ),
       BottomNavItem(
-        icon: Icons.account_circle_outlined,
         label: 'Profile',
         page: '/profilepage',
+        size: 34,
+        svgAsset: 'lib/assets/person-fill.svg',
+        selectedColor: Colors.white,
+        unselectedColor: Colors.white30,
       ),
     ];
 
     // Build the BottomNavigationBarItem widgets
     List<BottomNavigationBarItem> bottomNavItems =
         navItems
-            .map((navItem) => navItem.build())
+            .map((navItem) => navItem.build(
+                navItems.indexOf(navItem) ==
+                    currIndex))
             .toList();
 
     return BottomNavigationBar(
@@ -70,7 +107,6 @@ class MyBottomNavBar extends StatelessWidget {
       onTap: (index) {
         // Perform navigation when an item is tapped
         final page = navItems[index].page;
-        // Navigator.of(context).pop();
         Navigator.of(context).pushNamed(page);
         // Optional: Call onTap callback if needed
         onTap(index);
@@ -78,8 +114,8 @@ class MyBottomNavBar extends StatelessWidget {
       items: bottomNavItems,
       type:
           BottomNavigationBarType.fixed, // Fixed
-      backgroundColor:
-          const Color.fromRGBO(242, 145, 163, 1),
+      backgroundColor: Colors.black,
+      // const Color.fromRGBO(242, 145, 163, 1),
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white30,
       showSelectedLabels: false,

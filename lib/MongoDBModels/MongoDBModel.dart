@@ -55,65 +55,79 @@ class MongoDbModel {
       };
 }
 
+AnimalModel animalModelFromJson(String str) =>
+    AnimalModel.fromJson(json.decode(str));
+
+String animalModelToJson(AnimalModel data) =>
+    json.encode(data.toJson());
+
 class AnimalModel {
   ObjectId id;
-  String animalType;
   String bio;
   String breed;
-  String contactEmail;
   String location;
-  String petAge;
-  String petName;
   String gender;
   String petId;
-  String petSize;
-  List<String> petImages;
+  String adoptionFee;
+  String age;
+  String color;
+  String contactEmail;
+  String petName;
+  String petType;
+  String size;
+  List<String> images;
 
   AnimalModel({
     required this.id,
-    required this.animalType,
     required this.bio,
     required this.breed,
-    required this.contactEmail,
     required this.location,
-    required this.petAge,
-    required this.petName,
     required this.gender,
     required this.petId,
-    required this.petSize,
-    required this.petImages,
+    required this.adoptionFee,
+    required this.age,
+    required this.color,
+    required this.contactEmail,
+    required this.petName,
+    required this.petType,
+    required this.size,
+    required this.images,
   });
 
   factory AnimalModel.fromJson(
           Map<String, dynamic> json) =>
       AnimalModel(
-        id: json['_id'],
-        animalType: json['Animal Type'],
+        id: json["_id"],
         bio: json['Bio'],
         breed: json['Breed'],
-        contactEmail: json['Contact Email'],
         location: json['Location'],
-        petAge: json['Pet Age'],
-        petName: json['Pet Name'],
         gender: json['Gender'],
         petId: json['PetId'],
-        petSize: json['Pet Size'],
-        petImages:
-            List<String>.from(json['Pet Images']),
+        adoptionFee: json['AdoptionFee'],
+        age: json['Age'],
+        color: json['Color'],
+        contactEmail: json['Contact_Email'],
+        petName: json['Pet_Name'],
+        petType: json['Pet_Type'],
+        size: json['Size'],
+        images: List<String>.from(json['Images']),
       );
 
   Map<String, dynamic> toJson() => {
-        '_id': id,
-        'Animal Type': animalType,
+        // ignore: deprecated_member_use
+        '_id': {'\$oid': id.toHexString()},
         'Bio': bio,
         'Breed': breed,
-        'Contact Email': contactEmail,
         'Location': location,
-        'Pet Age': petAge,
-        'Pet Name': petName,
         'Gender': gender,
         'PetId': petId,
-        'Pet Size': petSize,
-        'Pet Images': petImages,
+        'AdoptionFee': adoptionFee,
+        'Age': age,
+        'Color': color,
+        'Contact_Email': contactEmail,
+        'Pet_Name': petName,
+        'Pet_Type': petType,
+        'Size': size,
+        'Images': images,
       };
 }

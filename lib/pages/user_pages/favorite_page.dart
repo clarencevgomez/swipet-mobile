@@ -11,7 +11,7 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState
     extends State<FavoritePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {

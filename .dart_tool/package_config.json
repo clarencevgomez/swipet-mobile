@@ -111,9 +111,15 @@
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/flutter_lints-3.0.2",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/flutter_lints-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "flutter_randomcolor",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/flutter_randomcolor-1.0.15",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_svg",
@@ -129,7 +135,7 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/http-1.2.1",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/http-1.2.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -138,6 +144,12 @@
       "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/intl-0.19.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "js",
@@ -171,9 +183,9 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/lints-3.0.0",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/lints-4.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.1"
     },
     {
       "name": "logging",
@@ -333,7 +345,7 @@
     },
     {
       "name": "uuid",
-      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/uuid-4.4.0",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/uuid-4.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -375,9 +387,9 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/web-0.5.1",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/web-1.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "xml",
@@ -392,7 +404,7 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2024-07-12T01:23:41.138181Z",
+  "generated": "2024-07-17T01:27:05.895456Z",
   "generator": "pub",
   "generatorVersion": "3.4.3",
   "flutterRoot": "file:///Users/clarencegomez/flutter",

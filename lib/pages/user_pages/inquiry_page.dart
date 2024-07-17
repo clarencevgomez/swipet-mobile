@@ -13,11 +13,11 @@ class _InquiryPageState
     extends State<InquiryPage> {
   @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
+    int selectedIndex = 3;
 
-    void _onItemTapped(int index) {
+    void onItemTapped(int index) {
       setState(() {
-        _selectedIndex = index;
+        selectedIndex = index;
       });
     }
 
@@ -26,8 +26,8 @@ class _InquiryPageState
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: MyBottomNavBar(
-        onTap: _onItemTapped,
-        currIndex: _selectedIndex,
+        onTap: onItemTapped,
+        currIndex: selectedIndex,
       ),
       body: const Center(
         child: Text("Inquiry Page",
