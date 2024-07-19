@@ -10,29 +10,42 @@ class AnimalInfoCard extends StatelessWidget {
   final String breed;
   final String gender;
   final String location;
-  final String color;
+  final List<String> color;
   final String petType;
   final String bio;
   final String contactEmail;
   final String adoptionFee;
+  final String username;
 
-  const AnimalInfoCard({
-    super.key,
-    required this.age,
-    required this.breed,
-    required this.gender,
-    required this.location,
-    required this.color,
-    required this.petType,
-    required this.bio,
-    required this.contactEmail,
-    required this.adoptionFee,
-  });
+  const AnimalInfoCard(
+      {super.key,
+      required this.age,
+      required this.breed,
+      required this.gender,
+      required this.location,
+      required this.color,
+      required this.petType,
+      required this.bio,
+      required this.contactEmail,
+      required this.adoptionFee,
+      required this.username});
 
   String isEmpty(String? value) {
     return value?.isNotEmpty == true
         ? value!
         : 'N/A';
+  }
+
+  String getGender(String gender) {
+    return gender.toLowerCase() == 'male'
+        ? 'male'
+        : 'female';
+  }
+
+  String isUserEmpty(String owner) {
+    return owner.toLowerCase() == 'null'
+        ? 'N/A'
+        : owner;
   }
 
   @override
@@ -88,7 +101,7 @@ class AnimalInfoCard extends StatelessWidget {
                               'lib/assets/animalInfo/breed.svg',
                           info: breed),
                       const InfoDivider(),
-                      InfoText(
+                      ColorInfoText(
                           svgAsset:
                               'lib/assets/animalInfo/palette.svg',
                           info: color)
@@ -96,6 +109,12 @@ class AnimalInfoCard extends StatelessWidget {
                   ),
                 ),
               ),
+              const InfoHDivider(),
+              InfoText(
+                  svgAsset:
+                      'lib/assets/animalInfo/pet_fee.svg',
+                  info:
+                      "\$${f.format(int.parse(adoptionFee))}"),
               const InfoHDivider(),
               InfoText(
                   svgAsset:
@@ -109,9 +128,9 @@ class AnimalInfoCard extends StatelessWidget {
               const InfoHDivider(),
               InfoText(
                   svgAsset:
-                      'lib/assets/animalInfo/pet_fee.svg',
+                      'lib/assets/postcard-heart.svg',
                   info:
-                      "\$${f.format(int.parse(adoptionFee))}"),
+                      'Listed by ${isUserEmpty(username)}')
             ],
           ),
         ),
@@ -182,12 +201,6 @@ class Prompt extends StatelessWidget {
   }
 }
 
-String getGender(String gender) {
-  return gender.toLowerCase() == 'male'
-      ? 'male'
-      : 'female';
-}
-
 // Information Displayed
 class InfoText extends StatelessWidget {
   final String svgAsset;
@@ -223,5 +236,62 @@ class InfoText extends StatelessWidget {
                 fontWeight: FontWeight.w500),
           ),
         ]);
+  }
+}
+
+class ColorInfoText extends StatelessWidget {
+  final String svgAsset;
+  final List<String> info;
+
+  const ColorInfoText({
+    super.key,
+    required this.svgAsset,
+    required this.info,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment:
+          CrossAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          svgAsset,
+          width: 15,
+          height: 15,
+          colorFilter: const ColorFilter.mode(
+            Colors.black,
+            BlendMode.srcIn,
+          ),
+        ),
+        const SizedBox(
+          width: 7,
+        ),
+        ..._buildColorTexts(),
+      ],
+    );
+  }
+
+  List<Widget> _buildColorTexts() {
+    List<Widget> widgets = [];
+    for (int i = 0; i < info.length; i++) {
+      widgets.add(Text(
+        info[i],
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ));
+      if (i < info.length - 1) {
+        widgets.add(const Text(
+          ', ',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
+      }
+    }
+    return widgets;
   }
 }

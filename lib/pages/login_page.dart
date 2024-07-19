@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController();
   final passwordController =
       TextEditingController();
+  String currentUser = "";
 
   Future<void> userLogin(
       String username, String password) async {
@@ -34,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         const SnackBar(
             content: Text("Successful Login!")),
       );
+      currentUser = username;
       // if successful navigate to swipe screen
       // ignore: use_build_context_synchronously
       ScreenNavigator(cx: context).navigate(

@@ -70,12 +70,13 @@ class AnimalModel {
   String petId;
   String adoptionFee;
   String age;
-  String color;
+  List<String> color;
   String contactEmail;
   String petName;
   String petType;
   String size;
   List<String> images;
+  String? username;
 
   AnimalModel({
     required this.id,
@@ -92,6 +93,7 @@ class AnimalModel {
     required this.petType,
     required this.size,
     required this.images,
+    this.username,
   });
 
   factory AnimalModel.fromJson(
@@ -105,17 +107,18 @@ class AnimalModel {
         petId: json['PetId'],
         adoptionFee: json['AdoptionFee'],
         age: json['Age'],
-        color: json['Color'],
+        color: List<String>.from(json['Color']),
         contactEmail: json['Contact_Email'],
         petName: json['Pet_Name'],
         petType: json['Pet_Type'],
         size: json['Size'],
         images: List<String>.from(json['Images']),
+        username: json['username'],
       );
 
   Map<String, dynamic> toJson() => {
         // ignore: deprecated_member_use
-        '_id': {'\$oid': id.toHexString()},
+        '_id': id,
         'Bio': bio,
         'Breed': breed,
         'Location': location,
@@ -129,5 +132,6 @@ class AnimalModel {
         'Pet_Type': petType,
         'Size': size,
         'Images': images,
+        'Username': username
       };
 }

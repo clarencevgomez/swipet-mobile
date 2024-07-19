@@ -31,3 +31,19 @@ class InfoHDivider extends StatelessWidget {
     );
   }
 }
+
+class ProfileInfoHDivider
+    extends StatelessWidget {
+  const ProfileInfoHDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 30,
+      child: Divider(
+        thickness: 1,
+        color: Colors.grey,
+      ),
+    );
+  }
+}

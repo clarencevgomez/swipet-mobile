@@ -35,8 +35,9 @@ class _AnimalImageState
       const Color.fromRGBO(242, 142, 163, 1)
     ];
 
-    // Commenting out changeIndex() in build method to prevent infinite loop
-    // changeIndex();
+    String imageUrl = widget.image.isNotEmpty
+        ? widget.image
+        : 'lib/images/defaultLogo-pic.jpg';
 
     return AspectRatio(
       aspectRatio: 1 / 1,
@@ -47,13 +48,16 @@ class _AnimalImageState
           decoration: BoxDecoration(
             border: Border.all(
                 width: 3, color: colors[index]),
-            color: Colors.black,
+            // color: Colors.black,
             borderRadius:
                 BorderRadius.circular(15),
             image: DecorationImage(
               fit: BoxFit.cover,
               alignment: FractionalOffset.center,
-              image: NetworkImage(widget.image),
+              image: imageUrl.startsWith('http')
+                  ? NetworkImage(imageUrl)
+                  : AssetImage(imageUrl)
+                      as ImageProvider,
             ),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:swipet_mobile/components/my_bottom_bar.dart';
 
 class InquiryPage extends StatefulWidget {
@@ -23,7 +24,30 @@ class _InquiryPageState
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 100,
+        leading: Padding(
+          padding:
+              const EdgeInsets.only(left: 25.0),
+          child: SvgPicture.asset(
+            'lib/assets/appheaders/envelope-paper-heart.svg',
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+        backgroundColor: const Color.fromRGBO(
+            242, 162, 155, 1),
+        title: const Text(
+          "Your Inquiries",
+          style: TextStyle(
+              fontSize: 24,
+              color: Colors.white,
+              fontFamily: 'Recoleta'),
+        ),
         automaticallyImplyLeading: false,
+        titleSpacing: 10,
       ),
       bottomNavigationBar: MyBottomNavBar(
         onTap: onItemTapped,

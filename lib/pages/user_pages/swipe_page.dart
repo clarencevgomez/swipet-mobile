@@ -16,12 +16,19 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   bool _hasReachedEnd = false;
-
   int _selectedIndex = 0;
+  final AppinioSwiperController
+      _swiperController =
+      AppinioSwiperController();
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _changeCard() {
+    _swiperController.swipeLeft();
   }
 
   @override
@@ -44,15 +51,16 @@ class _SwipePageState extends State<SwipePage> {
         title: const Text(
           "SwiPet",
           style: TextStyle(
-            fontSize: 24,
-          ),
+              fontSize: 24,
+              fontFamily: 'Recoleta'),
         ),
         automaticallyImplyLeading: false,
         titleSpacing: 5,
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 16.0),
           child: FutureBuilder<
               List<Map<String, dynamic>>>(
             future: MongoDatabase
@@ -81,6 +89,8 @@ class _SwipePageState extends State<SwipePage> {
                     if (!_hasReachedEnd)
                       Expanded(
                         child: AppinioSwiper(
+                          controller:
+                              _swiperController,
                           cardCount: totalData,
                           cardBuilder:
                               (BuildContext
@@ -107,14 +117,7 @@ class _SwipePageState extends State<SwipePage> {
                         child: Padding(
                           padding:
                               EdgeInsets.all(8.0),
-                          child: Text(
-                            "You've reached the end!",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight:
-                                    FontWeight
-                                        .bold),
-                          ),
+                          child: EndPage(),
                         ),
                       ),
                   ],
@@ -133,6 +136,58 @@ class _SwipePageState extends State<SwipePage> {
         onTap: _onItemTapped,
         currIndex: _selectedIndex,
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation
+              .startDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+            left: 16, bottom: 80),
+        child: ClipOval(
+          child: Container(
+            color: Colors.white,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              elevation: 2,
+              onPressed: _changeCard,
+              tooltip: 'Change Card',
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+              ),
+              child: const Icon(Icons.close,
+                  color: Colors.black),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EndPage extends StatelessWidget {
+  const EndPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset(
+          'lib/images/cat-stretch.png',
+          height: (MediaQuery.of(context)
+                  .size
+                  .height /
+              3),
+        ),
+        const Text(
+          "You've reached the end!",
+          style: TextStyle(
+            fontSize: 32,
+            fontFamily: 'Recoleta',
+          ),
+        )
+      ],
     );
   }
 }

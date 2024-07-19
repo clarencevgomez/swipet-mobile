@@ -54,7 +54,23 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           fontFamily: 'DM Sans',
-          primaryColor: Colors.black),
+          primaryColor: Colors.black,
+          tabBarTheme: const TabBarTheme(
+              labelColor: Color.fromRGBO(
+                  255, 119, 155, 1),
+              unselectedLabelColor:
+                  Color.fromRGBO(
+                255,
+                200,
+                214,
+                1,
+              ),
+              indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                color: Color.fromRGBO(
+                    255, 119, 155, 1),
+                width: 3,
+              )))),
       debugShowCheckedModeBanner: false,
       home: const WelcomePage(),
     );

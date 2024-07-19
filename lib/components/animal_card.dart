@@ -10,16 +10,17 @@ class AnimalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // int imgAmnt = data.images.length;
+    int imgAmnt = data.images.length;
 
-    //image Elements
-    // int img1 = imgAmnt + 1;
-    // int img2 = img1 + 1;
-    // // int img3 = img2 + 1;
+    // image Elements
+    int img1 = imgAmnt - imgAmnt;
+    int img2 = img1 + 1;
+    int img3 = img2 + 1;
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Card(
+        margin: const EdgeInsets.all(0),
         color: Colors.white,
         elevation: 0,
         child: Padding(
@@ -41,31 +42,35 @@ class AnimalCard extends StatelessWidget {
 
                 // FIRST IMAGE
                 AnimalImage(
-                    image: data.images[0]),
+                    image: data.images[img1]),
 
                 const SizedBox(
                   height: 10,
                 ),
                 // PET INFO COMPONENT
                 AnimalInfoCard(
-                    age: data.age,
-                    breed: data.breed,
-                    gender: data.gender,
-                    location: data.location,
-                    color: data.color,
-                    petType: data.petType,
-                    bio: data.bio,
-                    contactEmail:
-                        data.contactEmail,
-                    adoptionFee:
-                        data.adoptionFee),
+                  age: data.age,
+                  breed: data.breed,
+                  gender: data.gender,
+                  location: data.location,
+                  color: data.color,
+                  petType: data.petType,
+                  bio: data.bio,
+                  contactEmail: data.contactEmail,
+                  adoptionFee: data.adoptionFee,
+                  username:
+                      data.username.toString(),
+                ),
+
                 // PET INFO
                 const SizedBox(
                   height: 10,
                 ),
                 // ANIMAL IMAGE
-                AnimalImage(
-                    image: data.images[1]),
+                if (img2 > 0 &&
+                    data.images[img2].isNotEmpty)
+                  AnimalImage(
+                      image: data.images[img2]),
                 const SizedBox(
                   height: 10,
                 ),
@@ -76,8 +81,10 @@ class AnimalCard extends StatelessWidget {
                   height: 10,
                 ),
                 // THIRD IMAGE
-                AnimalImage(
-                    image: data.images[2]),
+                if (img3 > 0 &&
+                    data.images[img3].isNotEmpty)
+                  AnimalImage(
+                      image: data.images[img3]),
               ],
             ),
           ),
@@ -89,10 +96,4 @@ class AnimalCard extends StatelessWidget {
 
 String isEmpty(String? data) {
   return data == null || data.isEmpty ? "" : data;
-}
-
-String isImageEmpty(String? data) {
-  return (data == null || data.isEmpty)
-      ? "lib/images/default.png"
-      : data;
 }

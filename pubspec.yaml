@@ -41,6 +41,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -68,6 +69,8 @@ flutter:
     - lib/images/
     - lib/assets/
     - lib/assets/animalInfo/
+    - lib/assets/appheaders/
+    - lib/assets/tabSvgs/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -98,4 +101,3 @@ flutter:
         - asset: fonts/DMSans-VariableFont_opsz,wght.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
