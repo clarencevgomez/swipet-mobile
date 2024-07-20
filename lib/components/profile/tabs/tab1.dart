@@ -1,35 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swipet_mobile/components/animal_card_items/vertical_divider.dart';
+import 'package:swipet_mobile/components/router.dart';
+import 'package:swipet_mobile/dbHelper/api_service.dart';
 
 class ProfileSettings extends StatelessWidget {
   const ProfileSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final ApiService apiService = ApiService();
+    return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
-        ProfileInfoText(
+        const ProfileInfoText(
             svgAsset:
                 'lib/assets/tabSvgs/person.svg',
             info: 'Edit Profile'),
-        ProfileInfoHDivider(),
-        ProfileInfoText(
+        const ProfileInfoHDivider(),
+        const ProfileInfoText(
             svgAsset:
                 'lib/assets/tabSvgs/person-add.svg',
             info: 'View Profile'),
-        ProfileInfoHDivider(),
-        ProfileInfoText(
+        const ProfileInfoHDivider(),
+        const ProfileInfoText(
             svgAsset:
                 'lib/assets/tabSvgs/settings.svg',
             info: 'Settings'),
-        SizedBox(
-          height: 150,
-        ),
-        ProfileLogoArea(
+        const SizedBox(
+            // height: 150,
+            height: 100),
+        OutlinedButton(
+            onPressed: () {
+              apiService.logout();
+              ScreenNavigator(cx: context)
+                  .navigate(
+                      '/welcome',
+                      NavigatorTweens
+                          .bottomToTop());
+            },
+            child: const Text('Logout')),
+        const ProfileLogoArea(
             svgAsset: 'lib/assets/swipet.svg',
             info: [
               'info@SwiPet.com',

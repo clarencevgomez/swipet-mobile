@@ -36,12 +36,15 @@ dependencies:
   appinio_swiper: ^2.1.1
   flutter_randomcolor: ^1.0.15
   intl: ^0.19.0
+  flutter_secure_storage: ^9.2.2
+  jwt_decoder: ^2.0.1
   # The following adds the Cupertino Icons font to your application.
   
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
 
+  http: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,6 +74,7 @@ flutter:
     - lib/assets/animalInfo/
     - lib/assets/appheaders/
     - lib/assets/tabSvgs/
+    - lib/assets/profileSvgs/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

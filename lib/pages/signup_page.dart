@@ -1,15 +1,14 @@
 import 'package:faker/faker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart';
 import 'package:swipet_mobile/components/action_footer.dart';
 import 'package:swipet_mobile/components/action_header.dart';
 import 'package:swipet_mobile/components/forgot_tile.dart';
 import 'package:swipet_mobile/components/name_text_field.dart';
 import 'package:swipet_mobile/components/text_field.dart';
 import 'package:swipet_mobile/components/my_button.dart'; // Import the new component
-import 'package:swipet_mobile/dbHelper/mongodb.dart';
+import 'package:swipet_mobile/dbHelper/api_service.dart';
 import 'package:swipet_mobile/components/router.dart';
-import 'package:mongo_dart/mongo_dart.dart' as M;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -35,34 +34,45 @@ class _SignupPageState extends State<SignupPage> {
   final lastNameController =
       TextEditingController();
 
-  // NEW USER FUNCTION
-  Future<void> _newUser(
-      String firstName,
-      String lastName,
-      String username,
-      String email,
-      String address,
-      String password) async {
-    var id = M.ObjectId(); // FOR A UNIQUE ID
+  final ApiService apiService = ApiService();
 
-    final data = MongoDbModel(
-        id: id,
-        firstName: firstName,
-        lastName: lastName,
-        username: username,
-        email: email,
-        address: address,
-        password: password);
-    await MongoDatabase.addUser(data);
+// WITH API SERVICE
+  Future<void> _register(
+    String firstName,
+    String lastName,
+    String username,
+    String email,
+    String address,
+    String password,
+    String phoneNumber,
+  ) async {
+    try {
+      final result = await apiService.register(
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          address,
+          username,
+          password);
+      String msg = result['message'];
+      if (msg.isNotEmpty) {
+        if (msg.contains('exists')) {
+          _showDialog(msg,
+              'Please use a different username');
+        } else {
+          _showDialog(msg, '');
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
     // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                // ignore: deprecated_member_use
-                Text(
-                    "inserted->\n\tID: ${id.$oid}\nUsername: $username")));
+
     _clearAll();
   }
+
+  // NEW USER FUNCTION
 
   void _clearAll() {
     firstNameController.clear();
@@ -72,6 +82,41 @@ class _SignupPageState extends State<SignupPage> {
     signUpLocationController.clear();
     signUpPasswordController.clear();
     signUpConfirmPasswordController.clear();
+  }
+
+  void _showDialog(String result, String info) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              result,
+              style: const TextStyle(
+                  fontFamily: 'Dm Sans',
+                  fontSize: 18),
+            ),
+          ),
+          content: Text(info,
+              style: const TextStyle(
+                  fontFamily: 'Dm Sans',
+                  fontSize: 16)),
+          actions: [
+            CupertinoButton(
+                child: const Icon(
+                  Icons.check_circle,
+                  color: Color.fromRGBO(
+                      255, 106, 146, 1),
+                  size: 32,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -202,7 +247,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 MyButton(
                   onPressed: () {
-                    _newUser(
+                    _register(
                       firstNameController.text,
                       lastNameController.text,
                       signUpUsernameController
@@ -212,6 +257,7 @@ class _SignupPageState extends State<SignupPage> {
                           .text,
                       signUpConfirmPasswordController
                           .text,
+                      "000 000 0000",
                     );
                   },
                   actionText: 'Sign Up',

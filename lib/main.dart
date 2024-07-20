@@ -52,6 +52,11 @@ class _MyAppState extends State<MyApp> {
             const AuthPage(),
       },
       theme: ThemeData(
+          progressIndicatorTheme:
+              const ProgressIndicatorThemeData(
+                  circularTrackColor:
+                      Colors.black,
+                  color: Colors.white),
           scaffoldBackgroundColor: Colors.white,
           fontFamily: 'DM Sans',
           primaryColor: Colors.black,
