@@ -45,6 +45,7 @@ dependencies:
 
 
   http: any
+  image_picker: ^1.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,6 +76,8 @@ flutter:
     - lib/assets/appheaders/
     - lib/assets/tabSvgs/
     - lib/assets/profileSvgs/
+    - lib/assets/animalProfile/animalChipSvgs/
+    - lib/assets/animalProfile/promptSvgs/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

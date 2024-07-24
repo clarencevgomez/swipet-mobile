@@ -1,3 +1,4 @@
+import 'package:swipet_mobile/components/profile/tabs/addPet/add_pet_page.dart';
 import 'package:swipet_mobile/components/router.dart';
 import 'package:swipet_mobile/dbHelper/mongodb.dart';
 import 'package:swipet_mobile/pages/auth_page.dart';
@@ -50,8 +51,20 @@ class _MyAppState extends State<MyApp> {
             const ProfilePage(),
         '/authpage': (BuildContext context) =>
             const AuthPage(),
+        '/listpetpage': (BuildContext context) =>
+            const AddPetPage(),
+        // '/addanimalpage':
+        //     (BuildContext context) =>
+        //         const NewAnimalInfo(),
+        // '/uploadanimalphotopage':
+        //     (BuildContext context) =>
+        //         const UploadAnimalPhoto(),
+        // '/animalpromptpage':
+        //     (BuildContext context) =>
+        //         const AnimalPrompts(),
       },
       theme: ThemeData(
+          primarySwatch: Colors.pink,
           progressIndicatorTheme:
               const ProgressIndicatorThemeData(
                   circularTrackColor:

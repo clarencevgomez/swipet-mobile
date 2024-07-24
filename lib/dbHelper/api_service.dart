@@ -190,6 +190,8 @@ class ApiService {
       String breed,
       String petSize,
       String bio,
+      String prompt1,
+      String prompt2,
       String contactEmail,
       String location,
       List<String> images,
@@ -213,6 +215,8 @@ class ApiService {
         'breed': breed,
         'petSize': petSize,
         'bio': bio,
+        'prompt1': prompt1,
+        'prompt2': prompt2,
         'contactEmail': contactEmail,
         'location': location,
         'images': images,
@@ -335,6 +339,8 @@ class ApiService {
       String breed,
       String petSize,
       String bio,
+      String prompt1,
+      String prompt2,
       String contactEmail,
       String location,
       List<String> images,
@@ -359,6 +365,8 @@ class ApiService {
         'breed': breed,
         'petSize': petSize,
         'bio': bio,
+        'prompt1': prompt1,
+        'prompt2': prompt2,
         'contactEmail': contactEmail,
         'location': location,
         'images': images,
@@ -417,6 +425,130 @@ class ApiService {
       return result;
     } else {
       throw Exception('Failed to search pets');
+    }
+  }
+
+  // Pet inquiry
+  Future<Map<String, dynamic>> sendInquiry(
+      String userLogin, String petId) async {
+    String? jwtToken = await getToken();
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/sendInquiry'),
+      headers: <String, String>{
+        'Content-Type':
+            'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $jwtToken',
+      },
+      body: jsonEncode(<String, String>{
+        'userLogin': userLogin,
+        'petId': petId,
+        'jwtToken': jwtToken!,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      if (result.containsKey('jwtToken') &&
+          result['jwtToken'].isNotEmpty) {
+        await storeToken(result['jwtToken']);
+      }
+      return result;
+    } else {
+      throw Exception('Failed to inquire');
+    }
+  }
+
+  // Getters
+  Future<Map<String, dynamic>> getUser(
+      String userLogin) async {
+    // Retrieving JWT
+    String? jwtToken = await getToken();
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/updateUser'),
+      headers: <String, String>{
+        'Content-Type':
+            'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $jwtToken',
+      },
+      body: jsonEncode(<String, String>{
+        'userLogin': userLogin,
+        'jwtToken': jwtToken!,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      if (result.containsKey('jwtToken') &&
+          result['jwtToken'].isNotEmpty) {
+        await storeToken(result['jwtToken']);
+      }
+      return result;
+    } else {
+      throw Exception('Failed to get user info');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserListings(
+      String userLogin) async {
+    // Retrieving JWT
+    String? jwtToken = await getToken();
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/getUserListings'),
+      headers: <String, String>{
+        'Content-Type':
+            'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $jwtToken',
+      },
+      body: jsonEncode(<String, String>{
+        'userLogin': userLogin,
+        'jwtToken': jwtToken!,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      if (result.containsKey('jwtToken') &&
+          result['jwtToken'].isNotEmpty) {
+        await storeToken(result['jwtToken']);
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Failed to get users listings');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserFavorites(
+      String userLogin) async {
+    // Retrieving JWT
+    String? jwtToken = await getToken();
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/getUserFavorites'),
+      headers: <String, String>{
+        'Content-Type':
+            'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $jwtToken',
+      },
+      body: jsonEncode(<String, String>{
+        'userLogin': userLogin,
+        'jwtToken': jwtToken!,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      if (result.containsKey('jwtToken') &&
+          result['jwtToken'].isNotEmpty) {
+        await storeToken(result['jwtToken']);
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Failed to get users favorites');
     }
   }
 }

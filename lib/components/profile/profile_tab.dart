@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swipet_mobile/components/profile/tabs/tab1.dart';
 import 'package:swipet_mobile/components/profile/tabs/tab2.dart';
 

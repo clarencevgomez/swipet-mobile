@@ -47,3 +47,18 @@ class ProfileInfoHDivider
     );
   }
 }
+
+class AnimalInfoHDivider extends StatelessWidget {
+  const AnimalInfoHDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 30,
+      child: Divider(
+        thickness: 0.8,
+        color: Colors.pink,
+      ),
+    );
+  }
+}

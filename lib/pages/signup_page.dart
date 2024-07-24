@@ -81,7 +81,7 @@ class _SignupPageState extends State<SignupPage> {
     signUpEmailController.clear();
     signUpLocationController.clear();
     signUpPasswordController.clear();
-    signUpConfirmPasswordController.clear();
+     signUpConfirmPasswordController.clear();
   }
 
   void _showDialog(String result, String info) {
