@@ -5,11 +5,13 @@ import 'package:swipet_mobile/components/animalBioItems/animal_text_field.dart';
 class PetType extends StatefulWidget {
   final List<Map<String, String>> petTypes;
   final String petType;
+  final void Function(String) onChanged;
 
   const PetType({
     super.key,
     required this.petTypes,
     required this.petType,
+    required this.onChanged,
   });
 
   @override
@@ -44,7 +46,8 @@ class _PetTypeState extends State<PetType> {
           Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceEvenly,
-            children: widget.petTypes.map((e) {
+            children: List<Widget>.from(
+                widget.petTypes.map((e) {
               return Padding(
                 padding: const EdgeInsets.only(
                     top: 20),
@@ -52,6 +55,7 @@ class _PetTypeState extends State<PetType> {
                   onTap: () {
                     setState(() {
                       petType = e['type']!;
+                      widget.onChanged(petType);
                       print(
                           'Selected pet type: $petType');
                     });
@@ -107,7 +111,7 @@ class _PetTypeState extends State<PetType> {
                   ),
                 ),
               );
-            }).toList(),
+            }).toList()),
           ),
         ],
       ),
@@ -118,11 +122,13 @@ class _PetTypeState extends State<PetType> {
 class PetSize extends StatefulWidget {
   final List<Map<String, String>> petSizes;
   final String petSize;
+  final void Function(String) onChanged;
 
   const PetSize({
     super.key,
     required this.petSizes,
     required this.petSize,
+    required this.onChanged,
   });
 
   @override
@@ -157,7 +163,8 @@ class _PetSizeState extends State<PetSize> {
           Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceEvenly,
-            children: widget.petSizes.map((e) {
+            children: List<Widget>.from(
+                widget.petSizes.map((e) {
               return Padding(
                 padding: const EdgeInsets.only(
                     top: 20),
@@ -165,6 +172,7 @@ class _PetSizeState extends State<PetSize> {
                   onTap: () {
                     setState(() {
                       petSize = e['size']!;
+                      widget.onChanged(petSize);
                       print(
                           'Selected pet size: $petSize');
                     });
@@ -227,7 +235,7 @@ class _PetSizeState extends State<PetSize> {
                   ),
                 ),
               );
-            }).toList(),
+            }).toList()),
           ),
         ],
       ),

@@ -39,6 +39,7 @@ class _AnimalImageState
         ? widget.image
         : 'lib/images/defaultLogo-pic.jpg';
 
+
     return AspectRatio(
       aspectRatio: 1 / 1,
       child: Padding(

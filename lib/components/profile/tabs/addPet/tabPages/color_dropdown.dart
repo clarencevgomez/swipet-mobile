@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
-  final String initialValue;
+  String selected;
+  final void Function(String?)
+      onChanged; // Add this
 
-  const CustomDropdown(
-      {super.key,
-      required this.items,
-      required this.initialValue});
+  CustomDropdown({
+    super.key,
+    required this.items,
+    required this.selected,
+    required this.onChanged, // Add this
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
   _CustomDropdownState createState() =>
       _CustomDropdownState();
 }
 
 class _CustomDropdownState
     extends State<CustomDropdown> {
-  late String _currentSelectedValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentSelectedValue = widget.initialValue;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -41,16 +37,18 @@ class _CustomDropdownState
                 borderRadius:
                     BorderRadius.circular(8.0)),
           ),
-          isEmpty: _currentSelectedValue == '',
+          isEmpty: widget.selected == '',
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: _currentSelectedValue,
+              value: widget.selected,
               isDense: true,
               onChanged: (String? newValue) {
                 setState(() {
-                  _currentSelectedValue =
-                      newValue!;
+                  widget.selected =
+                      newValue ?? ''; // Safeguard
                 });
+                widget.onChanged(
+                    newValue); // Call the callback
               },
               items: widget.items
                   .map((String value) {
@@ -64,7 +62,7 @@ class _CustomDropdownState
         ),
         const SizedBox(height: 16.0),
         Text(
-          'Selected value: $_currentSelectedValue',
+          'Selected value: ${widget.selected}',
           style: const TextStyle(
               fontSize: 16.0, color: Colors.grey),
         ),

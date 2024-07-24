@@ -4,9 +4,18 @@ import 'package:swipet_mobile/components/profile/profile_tab.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/animal_prompts.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/new_animal_info.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/upload_animal_photo.dart';
+import 'package:swipet_mobile/objects/newPetModel.dart';
 
-class AddPetPage extends StatelessWidget {
+class AddPetPage extends StatefulWidget {
   const AddPetPage({super.key});
+
+  @override
+  State<AddPetPage> createState() =>
+      _AddPetPageState();
+}
+
+class _AddPetPageState extends State<AddPetPage> {
+  NewPet newPet = NewPet();
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +127,15 @@ class AddPetPage extends StatelessWidget {
                   child: TabBarView(
                     children: [
                       NewAnimalInfo(
+                          pet: newPet,
                           tabController:
                               tabController),
-                      const UploadAnimalPhoto(),
-                      const AnimalPrompts(),
+                      UploadAnimalPhoto(
+                          tabController:
+                              tabController),
+                      AnimalPrompts(
+                        pet: newPet,
+                      ),
                     ],
                   ),
                 ),
