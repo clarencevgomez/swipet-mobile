@@ -48,7 +48,7 @@ class MyBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // List of BottomNavItem instances
+    // List of BottomNavItem instances excluding the "Inquiry" tab
     final List<BottomNavItem> navItems = [
       BottomNavItem(
         label: 'Swipe',
@@ -60,27 +60,10 @@ class MyBottomNavBar extends StatelessWidget {
         unselectedColor: Colors.white30,
       ),
       BottomNavItem(
-        label: 'Explore',
-        page: '/explorepage',
-        size: 30,
-        svgAsset:
-            'lib/assets/search-heart-fill.svg',
-        selectedColor: Colors.white,
-        unselectedColor: Colors.white30,
-      ),
-      BottomNavItem(
         label: 'Favorites',
         page: '/favoritepage',
         size: 30,
         svgAsset: 'lib/assets/hearts.svg',
-        selectedColor: Colors.white,
-        unselectedColor: Colors.white30,
-      ),
-      BottomNavItem(
-        label: 'Inquiry',
-        page: '/inquiry',
-        size: 30,
-        svgAsset: 'lib/assets/heart-mail.svg',
         selectedColor: Colors.white,
         unselectedColor: Colors.white30,
       ),
@@ -115,7 +98,6 @@ class MyBottomNavBar extends StatelessWidget {
       type:
           BottomNavigationBarType.fixed, // Fixed
       backgroundColor: Colors.black,
-      // const Color.fromRGBO(242, 145, 163, 1),
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white30,
       showSelectedLabels: false,

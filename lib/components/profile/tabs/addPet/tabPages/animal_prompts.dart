@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:swipet_mobile/components/profile/profile_button.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/animalFields/animal_bio.dart';
 import 'package:swipet_mobile/dbHelper/api_service.dart';
@@ -62,6 +63,30 @@ class _AnimalPromptsState
     );
   }
 
+  Future<void> _getUserEmail(NewPet pet) async {
+    try {
+      final emailResult =
+          await apiService.getUser(pet.userLogin);
+      final token = await apiService.getToken();
+
+      if (token != null) {
+        Map<String, dynamic> decoded =
+            JwtDecoder.decode(token);
+        String? email = decoded['email'];
+        setState(() {
+          widget.pet.contactEmail = email!;
+        });
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(
+                content: Text(
+                    "Successful Retrieval of! email: $email")));
+        ;
+      }
+    } catch (e) {}
+  }
+
   // WITH API SERVICE
   Future<void> _addPet(NewPet pet) async {
     try {
@@ -81,12 +106,12 @@ class _AnimalPromptsState
           pet.location,
           pet.images,
           pet.adoptionFee);
-
+      _getUserEmail(pet);
       String msg = result['message'];
       if (msg.isNotEmpty) {
         if (msg.contains('exists')) {
           _showDialog(msg,
-              'Please use a different username');
+              'Please check all the fields needed');
         } else {
           _showDialog(msg, '');
         }
@@ -229,7 +254,7 @@ class _AnimalPromptsState
                       const Color.fromRGBO(
                           242, 145, 163, 1),
                   svgAsset: '',
-                  onPressed: ()  {
+                  onPressed: () {
                     setState(() {
                       _updatePetData();
                     });

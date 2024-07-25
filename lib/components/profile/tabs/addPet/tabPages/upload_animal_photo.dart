@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:swipet_mobile/components/profile/profile_button.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/animal_info_image.dart';
+import 'package:swipet_mobile/dbHelper/api_service.dart';
+import 'dart:io';
+
+import 'package:swipet_mobile/objects/newPetModel.dart';
 
 class UploadAnimalPhoto extends StatefulWidget {
+  final NewPet pet;
   final TabController tabController;
 
-  const UploadAnimalPhoto(
-      {super.key, required this.tabController});
+  const UploadAnimalPhoto({
+    Key? key,
+    required this.pet,
+    required this.tabController,
+  }) : super(key: key);
 
   @override
   State<UploadAnimalPhoto> createState() =>
@@ -15,38 +24,95 @@ class UploadAnimalPhoto extends StatefulWidget {
 
 class _UploadAnimalPhotoState
     extends State<UploadAnimalPhoto> {
+  final List<File> _images = [];
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final List<XFile>? pickedFiles =
+        await _picker.pickMultiImage();
+
+    if (pickedFiles != null) {
+      setState(() {
+        _images.addAll(pickedFiles.map(
+            (pickedFile) =>
+                File(pickedFile.path)));
+      });
+    }
+  }
+
+  Future<void> _uploadImages() async {
+    final apiService = ApiService();
+    if (_images.isNotEmpty) {
+      try {
+        final result = await apiService
+            .uploadPetImages(_images);
+        if (result['status'] == 'success') {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Images uploaded successfully!')),
+          );
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
+            SnackBar(
+                content: Text(
+                    'Upload failed: ${result['message']}')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+          SnackBar(
+              content:
+                  Text('An error occurred: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('No images selected')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            const SingleChildScrollView(
-              padding: EdgeInsets.only(
-                  bottom:
-                      80.0), // Enough space for the floating button
+            SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                  bottom: 80.0),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 16.0),
+                padding:
+                    const EdgeInsets.symmetric(
+                        horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.start,
                   children: [
                     AnimalBioImage(
                       image: '',
+                      // animalImages:
+                      //     widget.pet.images,
                       photoNum: 1,
                     ),
                     AnimalBioImage(
                       image: '',
+                      // animalImages:
+                      //     widget.pet.images,
                       photoNum: 2,
                     ),
                     AnimalBioImage(
                       image: '',
+                      // animalImages:
+                      //     widget.pet.images,
                       photoNum: 3,
                     ),
-                    SizedBox(
-                      height: 50,
-                    ),
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),
@@ -58,14 +124,13 @@ class _UploadAnimalPhotoState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // NEXT BUTTON
                   ProfileButton(
                     backgroundColor:
                         const Color.fromRGBO(
                             242, 145, 163, 1),
                     svgAsset: '',
-                    onPressed: () {
-                      // Navigate to the next tab
+                    onPressed: () async {
+                      await _uploadImages();
                       if (widget.tabController
                               .index <
                           widget.tabController

@@ -17,7 +17,7 @@ class NewAnimalInfo extends StatefulWidget {
   final NewPet pet;
   final TabController tabController;
 
-  NewAnimalInfo({
+  const NewAnimalInfo({
     super.key,
     required this.pet,
     required this.tabController,
@@ -63,14 +63,6 @@ class _NewAnimalInfoState
   double space = 12.0;
   String petColor = '';
   String petGender = '';
-
-  // WITH API SERVICE
-  Future<void> _addPet() async {
-    // Here you should add the logic to send data to your API service
-    // For example:
-    // await apiService.addPet(...);
-    _clearAll();
-  }
 
   void _clearAll() {
     firstNameController.clear();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart'; // Import your MongoDBModel
 import 'package:swipet_mobile/components/animal_card.dart';
 import 'package:swipet_mobile/components/my_bottom_bar.dart';
@@ -63,8 +63,7 @@ class _SwipePageState extends State<SwipePage> {
               horizontal: 16.0),
           child: FutureBuilder<
               List<Map<String, dynamic>>>(
-            future: MongoDatabase
-                .getData(), // Update this to fetch the relevant data
+            future: MongoDatabase.getData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState ==
                   ConnectionState.waiting) {
@@ -81,7 +80,9 @@ class _SwipePageState extends State<SwipePage> {
                   snapshot.data!.isNotEmpty) {
                 var totalData =
                     snapshot.data!.length;
-                print('Total Data: $totalData');
+                // ignore: avoid_print
+                print(
+                    'Total Data: $totalData'); // Print the snapshot data
                 return Column(
                   mainAxisAlignment:
                       MainAxisAlignment.center,

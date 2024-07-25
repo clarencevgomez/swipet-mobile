@@ -6,6 +6,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:swipet_mobile/components/my_bottom_bar.dart';
 import 'package:swipet_mobile/components/profile/profile_image.dart';
 import 'package:swipet_mobile/components/profile/profile_tab.dart';
+import 'package:swipet_mobile/dbHelper/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,9 +19,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState
     extends State<ProfilePage> {
-  int selectedIndex = 4;
+  int selectedIndex = 2;
   String userName = '';
   String fullName = '';
+  String email = '';
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
@@ -37,15 +40,17 @@ class _ProfilePageState
       Map<String, dynamic> decodedToken =
           JwtDecoder.decode(token);
       if (kDebugMode) {
-        print("Decoded Token: $decodedToken");
+        print(": $decodedToken");
       }
       setState(() {
         userName = decodedToken['username'] ??
             'Unknown User';
-        fullName = decodedToken['firstName'] +
+        fullName = (decodedToken['firstName'] +
                 ' ' +
-                decodedToken['lastName'] ??
+                decodedToken['lastName']) ??
             'Unknown Location';
+        email = decodedToken['email'] ??
+            'No email found';
       });
     }
   }
@@ -56,8 +61,10 @@ class _ProfilePageState
     });
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
+// Ensure NewPet object is initialized
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -107,6 +114,13 @@ class _ProfilePageState
             ),
             Text(
               fullName,
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Recoleta'),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              email,
               style: const TextStyle(
                   fontSize: 16,
                   fontFamily: 'Recoleta'),

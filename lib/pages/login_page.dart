@@ -64,10 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         if (!mounted) return;
         String message = loginResult['message'] ??
             'Failed to retrieve token';
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(
-        //   SnackBar(content: Text(message)),
-        // );
+
         result = message;
       }
     } catch (e) {

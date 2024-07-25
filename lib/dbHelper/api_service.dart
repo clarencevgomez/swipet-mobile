@@ -1,5 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+// For setting file types
+import 'package:http_parser/http_parser.dart';
+// For file handling
+import 'dart:io';
 // For storing JWTs...
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -9,7 +13,7 @@ class ApiService {
   final String baseUrl =
       'https://swipet-becad9ab7362.herokuapp.com';
   final FlutterSecureStorage storage =
-      const FlutterSecureStorage();
+      FlutterSecureStorage();
 
   // Store JWT token function
   Future<void> storeToken(String token) async {
@@ -24,6 +28,114 @@ class ApiService {
 
   Future<void> logout() async {
     await storage.delete(key: 'jwtToken');
+  }
+
+  // Upload images apis
+  Future<Map<String, dynamic>> uploadUserImage(
+      File image) async {
+    String? jwtToken = await getToken();
+
+    String fileExtension =
+        image.path.split('.').last.toLowerCase();
+    MediaType mediaType;
+    if (fileExtension == 'jpeg' ||
+        fileExtension == 'jpg') {
+      mediaType = MediaType('image', 'jpeg');
+    } else if (fileExtension == 'png') {
+      mediaType = MediaType('image', 'png');
+    } else {
+      throw Exception('Unsupported image format');
+    }
+
+    final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            '$baseUrl/api/uploadUserImage'));
+    request.headers['Authorization'] =
+        'Bearer $jwtToken';
+    request.headers['Content-Type'] =
+        'multipart/form-data';
+
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'userImage',
+        image.path,
+        contentType: mediaType,
+      ),
+    );
+
+    // Sending http request
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseData =
+          await response.stream.bytesToString();
+      final result = jsonDecode(responseData);
+      if (result.containsKey('jwtToken') &&
+          result['jwtToken'].isNotEmpty) {
+        await storeToken(result['jwtToken']);
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Failed to upload user image');
+    }
+  }
+
+  Future<Map<String, dynamic>> uploadPetImages(
+      List<File> images) async {
+    String? jwtToken = await getToken();
+
+    final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            '$baseUrl/api/uploadPetImages'));
+    request.headers['Authorization'] =
+        'Bearer $jwtToken';
+    request.headers['Content-Type'] =
+        'multipart/form-data';
+
+    for (var image in images) {
+      String fileExtension = image.path
+          .split('.')
+          .last
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == 'jpeg' ||
+          fileExtension == 'jpg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (fileExtension == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else {
+        throw Exception(
+            'Unsupported image format');
+      }
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'petImages',
+          image.path,
+          contentType: mediaType,
+        ),
+      );
+    }
+
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseData =
+          await response.stream.bytesToString();
+      final result = jsonDecode(responseData);
+      if (result.containsKey('jwtToken') &&
+          result['jwtToken'].isNotEmpty) {
+        await storeToken(result['jwtToken']);
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Failed to upload pet images');
+    }
   }
 
   Future<Map<String, dynamic>> login(

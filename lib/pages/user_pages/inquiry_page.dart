@@ -14,7 +14,7 @@ class _InquiryPageState
     extends State<InquiryPage> {
   @override
   Widget build(BuildContext context) {
-    int selectedIndex = 3;
+    int selectedIndex = 2;
 
     void onItemTapped(int index) {
       setState(() {

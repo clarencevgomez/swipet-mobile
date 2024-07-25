@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:image_picker/image_picker.dart';
 
 pickImage(ImageSource source) async {
@@ -11,4 +14,9 @@ pickImage(ImageSource source) async {
     return await _file.readAsBytes();
   }
   print("No Image Selected");
+}
+
+// Image to string function
+String uint8ListToBase64(Uint8List uint8list) {
+  return base64Encode(uint8list);
 }

@@ -1,11 +1,7 @@
-// To parse this JSON data, do
-//
-//     final mongoDbModel = mongoDbModelFromJson(jsonString);
-
 import 'dart:convert';
-
 import 'package:mongo_dart/mongo_dart.dart';
 
+// MongoDbModel class
 MongoDbModel mongoDbModelFromJson(String str) =>
     MongoDbModel.fromJson(json.decode(str));
 
@@ -13,8 +9,7 @@ String mongoDbModelToJson(MongoDbModel data) =>
     json.encode(data.toJson());
 
 class MongoDbModel {
-  ObjectId
-      id; // Generated with the creation of the user
+  ObjectId id;
   String firstName;
   String lastName;
   String username;
@@ -23,9 +18,9 @@ class MongoDbModel {
   String password;
 
   MongoDbModel({
+    required this.id,
     required this.firstName,
     required this.lastName,
-    required this.id,
     required this.username,
     required this.email,
     required this.address,
@@ -35,13 +30,13 @@ class MongoDbModel {
   factory MongoDbModel.fromJson(
           Map<String, dynamic> json) =>
       MongoDbModel(
-        id: json["_id"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        username: json["username"],
-        email: json["email"],
-        address: json["address"],
-        password: json["password"],
+        id: json["_id"] ?? ObjectId(),
+        firstName: json["firstName"] ?? '',
+        lastName: json["lastName"] ?? '',
+        username: json["username"] ?? '',
+        email: json["email"] ?? '',
+        address: json["address"] ?? '',
+        password: json["password"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +50,7 @@ class MongoDbModel {
       };
 }
 
+// AnimalModel class
 AnimalModel animalModelFromJson(String str) =>
     AnimalModel.fromJson(json.decode(str));
 
@@ -99,25 +95,28 @@ class AnimalModel {
   factory AnimalModel.fromJson(
           Map<String, dynamic> json) =>
       AnimalModel(
-        id: json["_id"],
-        bio: json['Bio'],
-        breed: json['Breed'],
-        location: json['Location'],
-        gender: json['Gender'],
-        petId: json['PetId'],
-        adoptionFee: json['AdoptionFee'],
-        age: json['Age'],
-        color: List<String>.from(json['Color']),
-        contactEmail: json['Contact_Email'],
-        petName: json['Pet_Name'],
-        petType: json['Pet_Type'],
-        size: json['Size'],
-        images: List<String>.from(json['Images']),
+        id: json["_id"] ?? ObjectId(),
+        bio: json['Bio'] ?? '',
+        breed: json['Breed'] ?? '',
+        location: json['Location'] ?? '',
+        gender: json['Gender'] ?? '',
+        petId: json['PetId'] ?? '',
+        adoptionFee: json['AdoptionFee'] ?? '',
+        age: json['Age'] ?? '',
+        color: (json['Color'] != null)
+            ? List<String>.from(json['Color'])
+            : [],
+        contactEmail: json['Contact_Email'] ?? '',
+        petName: json['Pet_Name'] ?? '',
+        petType: json['Pet_Type'] ?? '',
+        size: json['Size'] ?? '',
+        images: (json['Images'] != null)
+            ? List<String>.from(json['Images'])
+            : [],
         username: json['username'],
       );
 
   Map<String, dynamic> toJson() => {
-        // ignore: deprecated_member_use
         '_id': id,
         'Bio': bio,
         'Breed': breed,
@@ -132,6 +131,6 @@ class AnimalModel {
         'Pet_Type': petType,
         'Size': size,
         'Images': images,
-        'Username': username
+        'Username': username,
       };
 }
