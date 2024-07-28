@@ -1,46 +1,43 @@
 import 'dart:math';
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:swipet_mobile/utils/utils.dart';
 
 class AnimalBioImage extends StatefulWidget {
   final String image;
-  final int photoNum;
+  final List<int> photoNums;
+  final List<File> animalImages;
 
-  const AnimalBioImage(
-      {super.key,
-      required this.image,
-      required this.photoNum});
+  const AnimalBioImage({
+    super.key,
+    required this.image,
+    required this.photoNums,
+    required this.animalImages,
+  });
 
   @override
-  _AnimalProfileImageState createState() =>
-      _AnimalProfileImageState();
+  _AnimalBioImageState createState() =>
+      _AnimalBioImageState();
 }
 
-class _AnimalProfileImageState
+class _AnimalBioImageState
     extends State<AnimalBioImage> {
-  int index = 0;
   final Random random = Random();
-  Uint8List? _animalImage;
 
   @override
   void initState() {
     super.initState();
-    changeIndex();
   }
 
   Future<void> _selectImage() async {
-    Uint8List img =
-        await pickImage(ImageSource.gallery);
-    setState(() {
-      _animalImage = img;
-    });
-  }
-
-  void changeIndex() {
-    setState(() => index = random.nextInt(3));
+    XFile? img = await ImagePicker()
+        .pickImage(source: ImageSource.gallery);
+    if (img != null) {
+      setState(() {
+        widget.animalImages.add(File(img.path));
+      });
+    }
   }
 
   @override
@@ -50,19 +47,67 @@ class _AnimalProfileImageState
       const Color.fromRGBO(242, 162, 155, 1),
       const Color.fromRGBO(242, 142, 163, 1),
     ];
-    String imageUrl = widget.image.isNotEmpty
-        ? widget.image
-        : '';
 
-    ImageProvider imageProvider;
-    if (_animalImage != null) {
-      imageProvider = MemoryImage(_animalImage!);
-    } else if (imageUrl.startsWith('http')) {
-      imageProvider = NetworkImage(imageUrl);
+    int colorIndex =
+        random.nextInt(colors.length);
+
+    return Column(
+      children: [
+        AnimalImageCard(
+          imageProvider: _getImageProvider(0),
+          animalImages: widget.animalImages,
+          onSelectImage: _selectImage,
+          photoNum: widget.photoNums[0],
+          borderColor: colors[colorIndex],
+        ),
+        AnimalImageCard(
+          imageProvider: _getImageProvider(1),
+          animalImages: widget.animalImages,
+          onSelectImage: _selectImage,
+          photoNum: widget.photoNums[1],
+          borderColor: colors[colorIndex],
+        ),
+        AnimalImageCard(
+          imageProvider: _getImageProvider(2),
+          animalImages: widget.animalImages,
+          onSelectImage: _selectImage,
+          photoNum: widget.photoNums[2],
+          borderColor: colors[colorIndex],
+        ),
+      ],
+    );
+  }
+
+  ImageProvider _getImageProvider(int index) {
+    if (widget.animalImages.length > index) {
+      return FileImage(
+          widget.animalImages[index]);
+    } else if (widget.image.startsWith('http')) {
+      return NetworkImage(widget.image);
     } else {
-      imageProvider = AssetImage(imageUrl);
+      return AssetImage(widget.image);
     }
+  }
+}
 
+class AnimalImageCard extends StatelessWidget {
+  final ImageProvider imageProvider;
+  final List<File> animalImages;
+  final Future<void> Function() onSelectImage;
+  final int photoNum;
+  final Color borderColor;
+
+  const AnimalImageCard({
+    super.key,
+    required this.imageProvider,
+    required this.animalImages,
+    required this.onSelectImage,
+    required this.photoNum,
+    required this.borderColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -76,16 +121,15 @@ class _AnimalProfileImageState
                 color: const Color.fromARGB(
                     255, 255, 162, 193),
                 border: Border.all(
-                    width: 3,
-                    color: colors[index]),
-                // color: Colors.black,
+                    width: 3, color: borderColor),
                 borderRadius:
                     BorderRadius.circular(15),
                 image: DecorationImage(
-                    fit: BoxFit.cover,
-                    alignment:
-                        FractionalOffset.center,
-                    image: imageProvider),
+                  fit: BoxFit.cover,
+                  alignment:
+                      FractionalOffset.center,
+                  image: imageProvider,
+                ),
               ),
             ),
           ),
@@ -95,23 +139,23 @@ class _AnimalProfileImageState
             style: FilledButton.styleFrom(
                 backgroundColor:
                     Colors.transparent),
-            onPressed: _selectImage,
+            onPressed: onSelectImage,
             child: Row(
               mainAxisAlignment:
                   MainAxisAlignment.center,
               children: [
                 Text(
-                  'Photo ${widget.photoNum}',
+                  animalImages.isNotEmpty
+                      ? 'Photo $photoNum'
+                      : 'No Photo',
                   style: const TextStyle(
                       fontSize: 40),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 const Icon(
                   Icons.file_upload_outlined,
                   size: 60,
-                )
+                ),
               ],
             ),
           ),

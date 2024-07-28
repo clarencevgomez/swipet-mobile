@@ -41,6 +41,11 @@ class PetNameArea extends StatelessWidget {
                       obscureText: false,
                       height: 50,
                       horizontal: 0,
+                      width:
+                          MediaQuery.of(context)
+                                  .size
+                                  .width -
+                              20,
                     ),
                     // Last Name
                     MyAnimalTextField(
@@ -51,6 +56,11 @@ class PetNameArea extends StatelessWidget {
                       obscureText: false,
                       height: 50,
                       horizontal: 0,
+                      width:
+                          MediaQuery.of(context)
+                                  .size
+                                  .width -
+                              20,
                     ),
                   ],
                 ),
@@ -86,15 +96,23 @@ class AdoptionFeeField extends StatelessWidget {
               children: [
                 const PetFieldTitle(
                     title: 'Adoption Fee*: \$ '),
-                const Spacer(),
+                SizedBox(
+                  width: MediaQuery.of(context)
+                          .size
+                          .width /
+                      3,
+                ),
                 Expanded(
                   child: MyAnimalTextField(
-                    placeholder: 'Adoption Fee',
-                    controller: feeController,
-                    obscureText: false,
-                    height: 50,
-                    horizontal: 0,
-                  ),
+                      placeholder: 'Adoption Fee',
+                      controller: feeController,
+                      obscureText: false,
+                      height: 50,
+                      horizontal: 0,
+                      width:
+                          MediaQuery.of(context)
+                              .size
+                              .width),
                 ),
               ],
             ),

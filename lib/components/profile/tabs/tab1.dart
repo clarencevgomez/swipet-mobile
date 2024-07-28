@@ -10,45 +10,50 @@ class ProfileSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ApiService apiService = ApiService();
-    return Column(
-      children: [
-        const SizedBox(
-          height: 15,
+    return Scaffold(
+      body: Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 15),
+              const ProfileInfoText(
+                  svgAsset:
+                      'lib/assets/tabSvgs/person.svg',
+                  info: 'Edit Profile'),
+              const ProfileInfoHDivider(),
+              const ProfileInfoText(
+                  svgAsset:
+                      'lib/assets/tabSvgs/person-add.svg',
+                  info: 'View Profile'),
+              const ProfileInfoHDivider(),
+              const ProfileInfoText(
+                  svgAsset:
+                      'lib/assets/tabSvgs/settings.svg',
+                  info: 'Settings'),
+              const SizedBox(height: 100),
+              OutlinedButton(
+                onPressed: () {
+                  apiService.logout();
+                  ScreenNavigator(cx: context)
+                      .navigate(
+                          '/welcome',
+                          NavigatorTweens
+                              .bottomToTop());
+                },
+                child: const Text('Logout'),
+              ),
+              const ProfileLogoArea(
+                  svgAsset:
+                      'lib/assets/swipet.svg',
+                  info: [
+                    'info@SwiPet.com',
+                    'SwiPet.com'
+                  ]),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
-        const ProfileInfoText(
-            svgAsset:
-                'lib/assets/tabSvgs/person.svg',
-            info: 'Edit Profile'),
-        const ProfileInfoHDivider(),
-        const ProfileInfoText(
-            svgAsset:
-                'lib/assets/tabSvgs/person-add.svg',
-            info: 'View Profile'),
-        const ProfileInfoHDivider(),
-        const ProfileInfoText(
-            svgAsset:
-                'lib/assets/tabSvgs/settings.svg',
-            info: 'Settings'),
-        const SizedBox(
-            // height: 150,
-            height: 100),
-        OutlinedButton(
-            onPressed: () {
-              apiService.logout();
-              ScreenNavigator(cx: context)
-                  .navigate(
-                      '/welcome',
-                      NavigatorTweens
-                          .bottomToTop());
-            },
-            child: const Text('Logout')),
-        const ProfileLogoArea(
-            svgAsset: 'lib/assets/swipet.svg',
-            info: [
-              'info@SwiPet.com',
-              'SwiPet.com'
-            ])
-      ],
+      ),
     );
   }
 }
@@ -66,35 +71,33 @@ class ProfileInfoText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context)
-                    .size
-                    .width /
-                8,
+      crossAxisAlignment:
+          CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width:
+              MediaQuery.of(context).size.width /
+                  8,
+        ),
+        SvgPicture.asset(
+          svgAsset,
+          width: 26,
+          height: 26,
+          colorFilter: const ColorFilter.mode(
+            Colors.black,
+            BlendMode.srcIn,
           ),
-          SvgPicture.asset(
-            svgAsset,
-            width: 26,
-            height: 26,
-            colorFilter: const ColorFilter.mode(
-              Colors.black,
-              BlendMode.srcIn,
-            ),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          Text(
-            isEmpty(info),
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                letterSpacing: -0.1),
-          ),
-        ]);
+        ),
+        const SizedBox(width: 15),
+        Text(
+          isEmpty(info),
+          style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              letterSpacing: -0.1),
+        ),
+      ],
+    );
   }
 }
 
@@ -111,46 +114,42 @@ class ProfileLogoArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context)
-                    .size
-                    .width /
-                8,
+      crossAxisAlignment:
+          CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width:
+              MediaQuery.of(context).size.width /
+                  8,
+        ),
+        SvgPicture.asset(
+          svgAsset,
+          width: 60,
+          height: 60,
+          colorFilter: const ColorFilter.mode(
+            Colors.black,
+            BlendMode.srcIn,
           ),
-          SvgPicture.asset(
-            svgAsset,
-            width: 60,
-            height: 60,
-            colorFilter: const ColorFilter.mode(
-              Colors.black,
-              BlendMode.srcIn,
-            ),
+        ),
+        const SizedBox(width: 15),
+        const SizedBox(height: 20),
+        Text(
+          isEmpty(info[0]),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Recoleta',
           ),
-          const SizedBox(
-            width: 15,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            isEmpty(info[0]),
-            style: const TextStyle(
+        ),
+        Text(
+          isEmpty(info[1]),
+          style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              fontFamily: 'Recoleta',
-            ),
-          ),
-          Text(
-            isEmpty(info[1]),
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Recoleta'),
-          ),
-        ]);
+              fontFamily: 'Recoleta'),
+        ),
+      ],
+    );
   }
 }
 

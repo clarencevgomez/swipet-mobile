@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:swipet_mobile/components/profile/profile_button.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/animal_info_image.dart';
-import 'package:swipet_mobile/dbHelper/api_service.dart';
 import 'dart:io';
 
 import 'package:swipet_mobile/objects/newPetModel.dart';
@@ -26,57 +24,6 @@ class _UploadAnimalPhotoState
     extends State<UploadAnimalPhoto> {
   final List<File> _images = [];
 
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile>? pickedFiles =
-        await _picker.pickMultiImage();
-
-    if (pickedFiles != null) {
-      setState(() {
-        _images.addAll(pickedFiles.map(
-            (pickedFile) =>
-                File(pickedFile.path)));
-      });
-    }
-  }
-
-  Future<void> _uploadImages() async {
-    final apiService = ApiService();
-    if (_images.isNotEmpty) {
-      try {
-        final result = await apiService
-            .uploadPetImages(_images);
-        if (result['status'] == 'success') {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(
-            const SnackBar(
-                content: Text(
-                    'Images uploaded successfully!')),
-          );
-        } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(
-            SnackBar(
-                content: Text(
-                    'Upload failed: ${result['message']}')),
-          );
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(
-          SnackBar(
-              content:
-                  Text('An error occurred: $e')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('No images selected')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,22 +42,10 @@ class _UploadAnimalPhotoState
                       CrossAxisAlignment.start,
                   children: [
                     AnimalBioImage(
-                      image: '',
-                      // animalImages:
-                      //     widget.pet.images,
-                      photoNum: 1,
-                    ),
-                    AnimalBioImage(
-                      image: '',
-                      // animalImages:
-                      //     widget.pet.images,
-                      photoNum: 2,
-                    ),
-                    AnimalBioImage(
-                      image: '',
-                      // animalImages:
-                      //     widget.pet.images,
-                      photoNum: 3,
+                      image:
+                          'lib/images/default-image.jpg',
+                      animalImages: _images,
+                      photoNums: [1, 2, 3],
                     ),
                     const SizedBox(height: 50),
                   ],
@@ -129,19 +64,13 @@ class _UploadAnimalPhotoState
                         const Color.fromRGBO(
                             242, 145, 163, 1),
                     svgAsset: '',
-                    onPressed: () async {
-                      await _uploadImages();
-                      if (widget.tabController
-                              .index <
-                          widget.tabController
-                                  .length -
-                              1) {
-                        widget.tabController
-                            .animateTo(widget
-                                    .tabController
-                                    .index +
-                                1);
-                      }
+                    onPressed: () {
+                      setState(() {
+                        // add to new pet once done
+                        widget.pet.images =
+                            _images;
+                      });
+                      debugPrintPetData(context);
                     },
                     actionText: 'Next',
                   ),
@@ -152,6 +81,67 @@ class _UploadAnimalPhotoState
           ],
         ),
       ),
+    );
+  }
+
+  void debugPrintPetData(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pet Data'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Text(
+                    'User Login: ${widget.pet.userLogin}'),
+                Text(
+                    'Pet Name: ${widget.pet.petName}'),
+                Text('Type: ${widget.pet.type}'),
+                Text(
+                    'Pet Age: ${widget.pet.petAge}'),
+                Text(
+                    'Pet Gender: ${widget.pet.petGender}'),
+                Text(
+                    'Colors: ${widget.pet.colors.join(', ')}'),
+                Text(
+                    'Breed: ${widget.pet.breed}'),
+                Text(
+                    'Pet Size: ${widget.pet.petSize}'),
+                Text('Bio: ${widget.pet.bio}'),
+                Text(
+                    'Prompt 1: ${widget.pet.prompt1}'),
+                Text(
+                    'Prompt 2: ${widget.pet.prompt2}'),
+                Text(
+                    'Contact Email: ${widget.pet.contactEmail}'),
+                Text(
+                    'Location: ${widget.pet.location}'),
+                Text('Images:'),
+                Row(
+                  children: widget.pet.images
+                      .map((file) {
+                    return Image.file(file,
+                        height: 100, width: 100);
+                  }).toList(),
+                ),
+                Text(
+                    'Adoption Fee: ${widget.pet.adoptionFee}'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

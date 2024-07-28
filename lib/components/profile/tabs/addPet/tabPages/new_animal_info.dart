@@ -246,7 +246,7 @@ class _NewAnimalInfoState
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(
-                        horizontal: 16.0),
+                        horizontal: 6.0),
                 child: Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.start,
@@ -467,7 +467,8 @@ class _NewAnimalInfoState
                                 1);
                       }
                     },
-                    actionText: 'Next',
+                    actionText:
+                        'Save Info'.toUpperCase(),
                   ),
                   const SizedBox(height: 15),
                 ],

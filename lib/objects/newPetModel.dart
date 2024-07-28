@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class NewPet {
   String userLogin;
   String petName;
@@ -12,7 +14,7 @@ class NewPet {
   String prompt2;
   String contactEmail;
   String location;
-  List<String> images;
+  List<File> images;
   String adoptionFee;
 
   NewPet({
@@ -21,7 +23,7 @@ class NewPet {
     this.type = '',
     this.petAge = '',
     this.petGender = '',
-    this.colors = const ['', '', ''],
+    this.colors = const [],
     this.breed = '',
     this.petSize = '',
     this.bio = '',
@@ -29,7 +31,7 @@ class NewPet {
     this.prompt2 = '',
     this.contactEmail = '',
     this.location = '',
-    this.images = const ['', '', ''],
+    this.images = const [],
     this.adoptionFee = '',
   });
 
@@ -49,7 +51,9 @@ class NewPet {
       'prompt2': prompt2,
       'contactEmail': contactEmail,
       'location': location,
-      'images': images,
+      'images': images
+          .map((image) => image.path)
+          .toList(),
       'adoptionFee': adoptionFee,
     };
   }
@@ -65,7 +69,7 @@ class NewPet {
       petGender: json['petGender'] ?? '',
       colors: json['colors'] != null
           ? List<String>.from(json['colors'])
-          : ['', '', ''],
+          : [],
       breed: json['breed'] ?? '',
       petSize: json['petSize'] ?? '',
       bio: json['bio'] ?? '',
@@ -74,8 +78,9 @@ class NewPet {
       contactEmail: json['contactEmail'] ?? '',
       location: json['location'] ?? '',
       images: json['images'] != null
-          ? List<String>.from(json['images'])
-          : ['', '', ''],
+          ? List<File>.from(json['images']
+              .map((path) => File(path)))
+          : [],
       adoptionFee: json['adoptionFee'] ?? '',
     );
   }

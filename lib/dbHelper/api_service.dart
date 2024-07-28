@@ -26,118 +26,17 @@ class ApiService {
     return await storage.read(key: 'jwtToken');
   }
 
-  Future<void> logout() async {
+  // Remove JWT token function
+  Future<void> removeToken() async {
     await storage.delete(key: 'jwtToken');
   }
 
-  // Upload images apis
-  Future<Map<String, dynamic>> uploadUserImage(
-      File image) async {
-    String? jwtToken = await getToken();
-
-    String fileExtension =
-        image.path.split('.').last.toLowerCase();
-    MediaType mediaType;
-    if (fileExtension == 'jpeg' ||
-        fileExtension == 'jpg') {
-      mediaType = MediaType('image', 'jpeg');
-    } else if (fileExtension == 'png') {
-      mediaType = MediaType('image', 'png');
-    } else {
-      throw Exception('Unsupported image format');
-    }
-
-    final request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            '$baseUrl/api/uploadUserImage'));
-    request.headers['Authorization'] =
-        'Bearer $jwtToken';
-    request.headers['Content-Type'] =
-        'multipart/form-data';
-
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'userImage',
-        image.path,
-        contentType: mediaType,
-      ),
-    );
-
-    // Sending http request
-    final response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseData =
-          await response.stream.bytesToString();
-      final result = jsonDecode(responseData);
-      if (result.containsKey('jwtToken') &&
-          result['jwtToken'].isNotEmpty) {
-        await storeToken(result['jwtToken']);
-      }
-      return result;
-    } else {
-      throw Exception(
-          'Failed to upload user image');
-    }
+  // Logout function
+  Future<void> logout() async {
+    await removeToken();
   }
 
-  Future<Map<String, dynamic>> uploadPetImages(
-      List<File> images) async {
-    String? jwtToken = await getToken();
-
-    final request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            '$baseUrl/api/uploadPetImages'));
-    request.headers['Authorization'] =
-        'Bearer $jwtToken';
-    request.headers['Content-Type'] =
-        'multipart/form-data';
-
-    for (var image in images) {
-      String fileExtension = image.path
-          .split('.')
-          .last
-          .toLowerCase();
-      MediaType mediaType;
-
-      if (fileExtension == 'jpeg' ||
-          fileExtension == 'jpg') {
-        mediaType = MediaType('image', 'jpeg');
-      } else if (fileExtension == 'png') {
-        mediaType = MediaType('image', 'png');
-      } else {
-        throw Exception(
-            'Unsupported image format');
-      }
-
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'petImages',
-          image.path,
-          contentType: mediaType,
-        ),
-      );
-    }
-
-    final response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseData =
-          await response.stream.bytesToString();
-      final result = jsonDecode(responseData);
-      if (result.containsKey('jwtToken') &&
-          result['jwtToken'].isNotEmpty) {
-        await storeToken(result['jwtToken']);
-      }
-      return result;
-    } else {
-      throw Exception(
-          'Failed to upload pet images');
-    }
-  }
-
+  // Login function
   Future<Map<String, dynamic>> login(
       String userLogin, String password) async {
     // Like a POST 'test' in ARC or Postman
@@ -165,6 +64,7 @@ class ApiService {
     }
   }
 
+  // Register function
   Future<Map<String, dynamic>> register(
       String firstName,
       String lastName,
@@ -198,36 +98,64 @@ class ApiService {
     }
   }
 
+  // Update user function
   Future<Map<String, dynamic>> updateUser(
-      String firstName,
-      String lastName,
-      String email,
-      String phoneNumber,
-      String location,
-      String userLogin) async {
-    // Retrieving JWT
+    String firstName,
+    String lastName,
+    String email,
+    String phoneNumber,
+    String location,
+    String userLogin,
+    File? userImage,
+  ) async {
     String? jwtToken = await getToken();
+    final uri =
+        Uri.parse('$baseUrl/api/updateUser');
+    final request =
+        http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] =
+        'Bearer $jwtToken';
 
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/updateUser'),
-      headers: <String, String>{
-        'Content-Type':
-            'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $jwtToken',
-      },
-      body: jsonEncode(<String, String>{
-        'firstName': firstName,
-        'lastName': lastName,
-        'email': email,
-        'phoneNumber': phoneNumber,
-        'location': location,
-        'userLogin': userLogin,
-        'jwtToken': jwtToken!,
-      }),
-    );
+    if (userImage != null) {
+      String fileExtension = userImage.path
+          .split('.')
+          .last
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == 'jpeg' ||
+          fileExtension == 'jpg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (fileExtension == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else {
+        throw Exception(
+            'Unsupported image format');
+      }
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'userImage',
+          userImage.path,
+          contentType: mediaType,
+        ),
+      );
+    }
+
+    request.fields['firstName'] = firstName;
+    request.fields['lastName'] = lastName;
+    request.fields['email'] = email;
+    request.fields['phoneNumber'] = phoneNumber;
+    request.fields['location'] = location;
+    request.fields['userLogin'] = userLogin;
+    request.fields['jwtToken'] = jwtToken!;
+
+    final response = await request.send();
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
+      final responseData =
+          await response.stream.bytesToString();
+      final result = jsonDecode(responseData);
       if (result.containsKey('jwtToken') &&
           result['jwtToken'].isNotEmpty) {
         await storeToken(result['jwtToken']);
@@ -238,6 +166,7 @@ class ApiService {
     }
   }
 
+  // Delete user function
   Future<Map<String, dynamic>> deleteUser(
       String userLogin, String password) async {
     String? jwtToken = await getToken();
@@ -270,6 +199,7 @@ class ApiService {
     }
   }
 
+  // Forgot password function
   Future<Map<String, dynamic>> forgotPassword(
       String userLogin, String email) async {
     final response = await http.post(
@@ -292,53 +222,79 @@ class ApiService {
     }
   }
 
+  // Add pet function
   Future<Map<String, dynamic>> addPet(
-      String userLogin,
-      String petName,
-      String type,
-      String petAge,
-      String petGender,
-      List<String> colors,
-      String breed,
-      String petSize,
-      String bio,
-      String prompt1,
-      String prompt2,
-      String contactEmail,
-      String location,
-      List<String> images,
-      String adoptionFee) async {
+    String userLogin,
+    String petName,
+    String type,
+    String petAge,
+    String petGender,
+    List<String> colors,
+    String breed,
+    String petSize,
+    String bio,
+    String prompt1,
+    String prompt2,
+    String contactEmail,
+    String location,
+    List<File> images,
+    String adoptionFee,
+  ) async {
     String? jwtToken = await getToken();
+    final uri = Uri.parse('$baseUrl/api/addpet');
+    final request =
+        http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] =
+        'Bearer $jwtToken';
 
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/addpet'),
-      headers: <String, String>{
-        'Content-Type':
-            'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $jwtToken',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'userLogin': userLogin,
-        'petName': petName,
-        'type': type,
-        'petAge': petAge,
-        'petGender': petGender,
-        'colors': colors,
-        'breed': breed,
-        'petSize': petSize,
-        'bio': bio,
-        'prompt1': prompt1,
-        'prompt2': prompt2,
-        'contactEmail': contactEmail,
-        'location': location,
-        'images': images,
-        'adoptionFee': adoptionFee,
-        'jwtToken': jwtToken,
-      }),
-    );
+    for (var image in images) {
+      String fileExtension = image.path
+          .split('.')
+          .last
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == 'jpeg' ||
+          fileExtension == 'jpg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (fileExtension == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else {
+        throw Exception(
+            'Unsupported image format');
+      }
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'petImages',
+          image.path,
+          contentType: mediaType,
+        ),
+      );
+    }
+
+    request.fields['userLogin'] = userLogin;
+    request.fields['petName'] = petName;
+    request.fields['type'] = type;
+    request.fields['petAge'] = petAge;
+    request.fields['petGender'] = petGender;
+    request.fields['colors'] = jsonEncode(colors);
+    request.fields['breed'] = breed;
+    request.fields['petSize'] = petSize;
+    request.fields['bio'] = bio;
+    request.fields['prompt1'] = prompt1;
+    request.fields['prompt2'] = prompt2;
+    request.fields['contactEmail'] = contactEmail;
+    request.fields['location'] = location;
+    request.fields['adoptionFee'] = adoptionFee;
+    request.fields['jwtToken'] = jwtToken!;
+
+    final response = await request.send();
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
+      final responseData =
+          await response.stream.bytesToString();
+      final result = jsonDecode(responseData);
       if (result.containsKey('jwtToken') &&
           result['jwtToken'].isNotEmpty) {
         await storeToken(result['jwtToken']);
@@ -349,6 +305,7 @@ class ApiService {
     }
   }
 
+  // Add pet to favorites function
   Future<Map<String, dynamic>> addFavorite(
       String userLogin, String petId) async {
     String? jwtToken = await getToken();
@@ -379,6 +336,7 @@ class ApiService {
     }
   }
 
+  // Remove pet from favorites function
   Future<Map<String, dynamic>> removeFavorite(
       String userLogin, String petId) async {
     String? jwtToken = await getToken();
@@ -410,6 +368,7 @@ class ApiService {
     }
   }
 
+  // Delete pet function
   Future<Map<String, dynamic>> deletePet(
       String userLogin, String petId) async {
     String? jwtToken = await getToken();
@@ -440,55 +399,82 @@ class ApiService {
     }
   }
 
+  // Update pet function
   Future<Map<String, dynamic>> updatePet(
-      String userLogin,
-      String petId,
-      String petName,
-      String type,
-      String petAge,
-      String petGender,
-      List<String> colors,
-      String breed,
-      String petSize,
-      String bio,
-      String prompt1,
-      String prompt2,
-      String contactEmail,
-      String location,
-      List<String> images,
-      String adoptionFee) async {
+    String userLogin,
+    String petId,
+    String petName,
+    String type,
+    String petAge,
+    String petGender,
+    List<String> colors,
+    String breed,
+    String petSize,
+    String bio,
+    String prompt1,
+    String prompt2,
+    String contactEmail,
+    String location,
+    List<File> images,
+    String adoptionFee,
+  ) async {
     String? jwtToken = await getToken();
+    final uri =
+        Uri.parse('$baseUrl/api/updatepet');
+    final request =
+        http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] =
+        'Bearer $jwtToken';
 
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/updatepet'),
-      headers: <String, String>{
-        'Content-Type':
-            'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $jwtToken',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'userLogin': userLogin,
-        'petId': petId,
-        'petName': petName,
-        'type': type,
-        'petAge': petAge,
-        'petGender': petGender,
-        'colors': colors,
-        'breed': breed,
-        'petSize': petSize,
-        'bio': bio,
-        'prompt1': prompt1,
-        'prompt2': prompt2,
-        'contactEmail': contactEmail,
-        'location': location,
-        'images': images,
-        'adoptionFee': adoptionFee,
-        'jwtToken': jwtToken,
-      }),
-    );
+    for (var image in images) {
+      String fileExtension = image.path
+          .split('.')
+          .last
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == 'jpeg' ||
+          fileExtension == 'jpg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (fileExtension == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else {
+        throw Exception(
+            'Unsupported image format');
+      }
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'petImages',
+          image.path,
+          contentType: mediaType,
+        ),
+      );
+    }
+
+    request.fields['userLogin'] = userLogin;
+    request.fields['petId'] = petId;
+    request.fields['petName'] = petName;
+    request.fields['type'] = type;
+    request.fields['petAge'] = petAge;
+    request.fields['petGender'] = petGender;
+    request.fields['colors'] = jsonEncode(colors);
+    request.fields['breed'] = breed;
+    request.fields['petSize'] = petSize;
+    request.fields['bio'] = bio;
+    request.fields['prompt1'] = prompt1;
+    request.fields['prompt2'] = prompt2;
+    request.fields['contactEmail'] = contactEmail;
+    request.fields['location'] = location;
+    request.fields['adoptionFee'] = adoptionFee;
+    request.fields['jwtToken'] = jwtToken!;
+
+    final response = await request.send();
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
+      final responseData =
+          await response.stream.bytesToString();
+      final result = jsonDecode(responseData);
       if (result.containsKey('jwtToken') &&
           result['jwtToken'].isNotEmpty) {
         await storeToken(result['jwtToken']);
@@ -499,6 +485,7 @@ class ApiService {
     }
   }
 
+  // Search pet function
   Future<Map<String, dynamic>> searchPet(
       String userLogin,
       String type,
@@ -540,7 +527,7 @@ class ApiService {
     }
   }
 
-  // Pet inquiry
+  // Pet inquiry function
   Future<Map<String, dynamic>> sendInquiry(
       String userLogin, String petId) async {
     String? jwtToken = await getToken();

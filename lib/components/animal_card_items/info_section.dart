@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:swipet_mobile/components/animal_card_items/vertical_divider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // Define the main component
 class AnimalInfoCard extends StatelessWidget {
@@ -15,7 +15,8 @@ class AnimalInfoCard extends StatelessWidget {
   final String contactEmail;
   final String adoptionFee;
   final String username;
-
+  final String p1;
+  final String p2;
   const AnimalInfoCard({
     super.key,
     this.age = 'N/A',
@@ -28,6 +29,8 @@ class AnimalInfoCard extends StatelessWidget {
     this.contactEmail = 'N/A',
     this.adoptionFee = '0',
     this.username = 'N/A',
+    required this.p1,
+    required this.p2,
   });
 
   String isEmpty(String? value) {
@@ -146,10 +149,12 @@ class AnimalInfoCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 25),
-        Prompt(
-          info: bio,
-          question: 'Why should you adopt me?',
-        ),
+        if (bio.isNotEmpty == true &&
+            bio.toString() != 'null')
+          Prompt(
+            info: bio,
+            question: 'About Me',
+          ),
       ],
     );
   }
@@ -213,7 +218,7 @@ class Prompt extends StatelessWidget {
   }
 }
 
-// Information Displayed
+// Define the main component
 class InfoText extends StatelessWidget {
   final String svgAsset;
   final String info;
@@ -243,8 +248,9 @@ class InfoText extends StatelessWidget {
         Text(
           isEmpty(info),
           style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500),
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );

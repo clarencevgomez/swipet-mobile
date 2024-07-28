@@ -112,69 +112,83 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center,
-            children: [
-              const ActionHeader(
-                imagePath:
-                    'lib/images/login-page-icon.png',
-                actionText: "Log In",
-              ),
-              if (isLoading)
-                const CircularProgressIndicator
-                    .adaptive()
-              else ...[
-                Text(
-                  result,
-                  style: const TextStyle(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+              horizontal: 20.0, vertical: 40.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 150,
+                ),
+                const ActionHeader(
+                  imagePath:
+                      'lib/images/login-page-icon.png',
+                  actionText: "Log In",
+                ),
+                if (isLoading)
+                  const CircularProgressIndicator
+                      .adaptive()
+                else ...[
+                  Text(
+                    result,
+                    style: const TextStyle(
                       color: Colors.red,
                       fontSize: 22,
-                      letterSpacing: -0.4),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10),
-                  child: MyTextField(
-                    next: Icons.person_outline,
-                    placeholder: 'Username*',
-                    controller:
-                        usernameController,
-                    obscureText: false,
-                  ),
-                ),
-                MyTextField(
-                  next: Icons.lock_outline,
-                  placeholder: 'Password*',
-                  controller: passwordController,
-                  obscureText: true,
-                ),
-                MyButton(
-                  onPressed: () {
-                    loginUser(
-                        usernameController.text,
-                        passwordController.text);
-                  },
-                  actionText: 'Login',
-                ),
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center,
-                  children: [
-                    ActionFooter(
-                      page: '/signup',
-                      description:
-                          "Need an Account?\t",
-                      actionText: "Sign Up",
-                      animation: NavigatorTweens
-                          .bottomToTop(),
+                      letterSpacing: -0.4,
                     ),
-                  ],
-                ),
-                const ResetPassword(),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(
+                            top: 10),
+                    child: MyTextField(
+                      next: Icons.person_outline,
+                      placeholder: 'Username*',
+                      controller:
+                          usernameController,
+                      obscureText: false,
+                    ),
+                  ),
+                  MyTextField(
+                    next: Icons.lock_outline,
+                    placeholder: 'Password*',
+                    controller:
+                        passwordController,
+                    obscureText: true,
+                  ),
+                  MyButton(
+                    onPressed: () {
+                      loginUser(
+                          usernameController.text,
+                          passwordController
+                              .text);
+                    },
+                    actionText: 'Login',
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
+                    children: [
+                      ActionFooter(
+                        page: '/signup',
+                        description:
+                            "Need an Account?\t",
+                        actionText: "Sign Up",
+                        animation: NavigatorTweens
+                            .bottomToTop(),
+                      ),
+                    ],
+                  ),
+                  const ResetPassword(),
+                  SizedBox(
+                    height: 250,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

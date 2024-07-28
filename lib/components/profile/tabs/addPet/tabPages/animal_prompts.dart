@@ -65,8 +65,6 @@ class _AnimalPromptsState
 
   Future<void> _getUserEmail(NewPet pet) async {
     try {
-      final emailResult =
-          await apiService.getUser(pet.userLogin);
       final token = await apiService.getToken();
 
       if (token != null) {
@@ -104,7 +102,7 @@ class _AnimalPromptsState
           pet.prompt2,
           pet.contactEmail,
           pet.location,
-          pet.images,
+          pet.images, // FIX LATER
           pet.adoptionFee);
       _getUserEmail(pet);
       String msg = result['message'];
@@ -219,7 +217,7 @@ class _AnimalPromptsState
                           title:
                               'Write some prompts for your pet!',
                           description:
-                              'Make sure to include prompts for your pet so potential soulmates can get to know them better!',
+                              'Make sure to include prompts for your pet so potential\nsoulmates can get to know them better!',
                         ),
                         const SizedBox(
                           height: 20,

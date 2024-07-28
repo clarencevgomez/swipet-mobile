@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:swipet_mobile/MongoDBModels/MongoDBModel.dart';
+import 'dart:io';
 import 'package:swipet_mobile/components/animal_card_items/animal_images.dart';
 import 'package:swipet_mobile/components/animal_card_items/info_section.dart';
 
 class AnimalCard extends StatelessWidget {
-  final AnimalModel data;
-  const AnimalCard(
-      {super.key, required this.data});
+  final Map<String, dynamic> pet;
+  final List<dynamic> images;
+
+  const AnimalCard({
+    Key? key,
+    required this.pet,
+    required this.images,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    int imgAmnt = data.images.length;
-
-    // image Elements
-    int img1 = imgAmnt - imgAmnt;
-    int img2 = img1 + 1;
-    int img3 = img2 + 1;
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Card(
@@ -33,58 +31,68 @@ class AnimalCard extends StatelessWidget {
               children: [
                 // PET NAME
                 Text(
-                  isEmpty(data.petName),
+                  _safeString(pet['petName']),
                   style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight:
-                          FontWeight.w600),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                const SizedBox(height: 10),
 
                 // FIRST IMAGE
-                AnimalImage(
-                    image: data.images[img1]),
 
-                const SizedBox(
-                  height: 10,
-                ),
+                AnimalImage(image: images[0]),
+
+                const SizedBox(height: 10),
+
                 // PET INFO COMPONENT
                 AnimalInfoCard(
-                  age: data.age,
-                  breed: data.breed,
-                  gender: data.gender,
-                  location: data.location,
-                  color: data.color,
-                  petType: data.petType,
-                  bio: data.bio,
-                  contactEmail: data.contactEmail,
-                  adoptionFee: data.adoptionFee,
-                  username:
-                      data.username.toString(),
+                  age: _safeString(pet['age']),
+                  breed:
+                      _safeString(pet['breed']),
+                  gender:
+                      _safeString(pet['gender']),
+                  location: _safeString(
+                      pet['location']),
+                  color: List<String>.from(
+                      pet['color'] ?? ['N/A']),
+                  petType:
+                      _safeString(pet['petType']),
+                  bio: _safeString(pet['bio']),
+                  contactEmail: _safeString(
+                      pet['contactEmail']),
+                  adoptionFee: _safeString(
+                      pet['adoptionFee']),
+                  username: _safeString(
+                      pet['username']),
+                  p1: _safeString(pet['prompt1']),
+                  p2: _safeString(pet['prompt2']),
                 ),
-
-                // PET INFO
-                const SizedBox(
-                  height: 10,
-                ),
-                // ANIMAL IMAGE
-                if (img2 > 0 &&
-                    data.images[img2].isNotEmpty)
-                  AnimalImage(
-                      image: data.images[img2]),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Prompt(
-                    info: "Prompt Answer",
-                    question: "Prompt Question"),
-                const SizedBox(
-                  height: 10,
-                ),
-                // THIRD IMAGE
-                if (img3 > 0 &&
-                    data.images[img3].isNotEmpty)
-                  AnimalImage(
-                      image: data.images[img3]),
+                const SizedBox(height: 10),
+                AnimalImage(image: images[1]),
+                const SizedBox(height: 10),
+                // PROMPT 1
+                if (_isValidString(
+                    pet['prompt1']))
+                  Prompt(
+                    info:
+                        pet['prompt1'].toString(),
+                    question:
+                        'Why should you adopt me',
+                  ),
+                const SizedBox(height: 10),
+                AnimalImage(image: images[2]),
+                const SizedBox(height: 10),
+                // PROMPT 2
+                if (_isValidString(
+                    pet['prompt2']))
+                  Prompt(
+                    info:
+                        pet['prompt2'].toString(),
+                    question:
+                        'My favorite thing(s) to do are:',
+                  ),
+                const SizedBox(height: 100),
               ],
             ),
           ),
@@ -92,8 +100,14 @@ class AnimalCard extends StatelessWidget {
       ),
     );
   }
-}
 
-String isEmpty(String? data) {
-  return data == null || data.isEmpty ? "" : data;
+  String _safeString(dynamic data) {
+    return data?.toString() ?? 'N/A';
+  }
+
+  bool _isValidString(String? data) {
+    return data != null &&
+        data.isNotEmpty &&
+        data != 'null';
+  }
 }

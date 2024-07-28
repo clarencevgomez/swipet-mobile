@@ -79,7 +79,11 @@ class _PetTypeState extends State<PetType> {
                                 .withOpacity(0.1)
                             : Colors.white,
                     label: SizedBox(
-                      width: 105,
+                      width:
+                          MediaQuery.of(context)
+                                  .size
+                                  .width /
+                              5,
                       height: 70,
                       child: Row(
                         mainAxisSize:
@@ -196,7 +200,11 @@ class _PetSizeState extends State<PetSize> {
                                 .withOpacity(0.1)
                             : Colors.white,
                     label: SizedBox(
-                      width: 70,
+                      width:
+                          MediaQuery.of(context)
+                                  .size
+                                  .width /
+                              7,
                       height: 60,
                       child: Column(
                         mainAxisSize:

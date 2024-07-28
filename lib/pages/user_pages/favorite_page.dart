@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:swipet_mobile/components/animal_card_items/animal_images.dart';
 import 'package:swipet_mobile/components/animal_card_items/vertical_divider.dart';
 import 'package:swipet_mobile/components/my_bottom_bar.dart';
 import 'package:swipet_mobile/dbHelper/api_service.dart';
@@ -87,6 +89,8 @@ class _FavoritePageState
 
   @override
   Widget build(BuildContext context) {
+    // Number formatting
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -206,6 +210,12 @@ class PetFavoriteInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Number Formatting
+    var f = NumberFormat.decimalPatternDigits(
+      locale: 'en_us',
+      decimalDigits: 0,
+    );
+
     return Column(
       children: [
         Row(
@@ -217,7 +227,7 @@ class PetFavoriteInfo extends StatelessWidget {
                         .size
                         .width /
                     20),
-            ListImage(image: image),
+            ListAnimalImage(image: image),
             const SizedBox(width: 10),
             // Pet Name
 
@@ -228,28 +238,28 @@ class PetFavoriteInfo extends StatelessWidget {
                 Text(
                   info,
                   style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.1),
                 ),
                 Text(
                   gender,
                   style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.1),
                 ),
                 Text(
-                  "Fee: \$$adoptionFee",
+                  "Fee: \$${f.format(int.tryParse(adoptionFee) ?? 0)}",
                   style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.1),
                 ),
                 Text(
                   location,
                   style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.1),
                 ),

@@ -131,7 +131,7 @@ class _AddPetPageState extends State<AddPetPage> {
                           tabController:
                               tabController),
                       UploadAnimalPhoto(
-                        pet: newPet,
+                          pet: newPet,
                           tabController:
                               tabController),
                       AnimalPrompts(
