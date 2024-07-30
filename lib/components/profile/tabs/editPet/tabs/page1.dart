@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,23 +14,25 @@ import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/color_drop
 import 'package:swipet_mobile/dbHelper/api_service.dart';
 import 'package:swipet_mobile/objects/newPetModel.dart';
 
-class NewAnimalInfo extends StatefulWidget {
+class EditAnimalInfo extends StatefulWidget {
   final NewPet pet;
+  final Map<String, dynamic> oldPet;
   final TabController tabController;
 
-  const NewAnimalInfo({
-    super.key,
+  const EditAnimalInfo({
+    Key? key,
     required this.pet,
+    required this.oldPet,
     required this.tabController,
-  });
+  }) : super(key: key);
 
   @override
-  State<NewAnimalInfo> createState() =>
-      _NewAnimalInfoState();
+  State<EditAnimalInfo> createState() =>
+      _EditAnimalInfoState();
 }
 
-class _NewAnimalInfoState
-    extends State<NewAnimalInfo> {
+class _EditAnimalInfoState
+    extends State<EditAnimalInfo> {
   // Name
   final firstNameController =
       TextEditingController();
@@ -81,6 +84,17 @@ class _NewAnimalInfoState
   void initState() {
     super.initState();
     loadUserData();
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    List<String> name =
+        widget.oldPet['Pet_Name'].split(" ");
+    firstNameController.text =
+        name.isNotEmpty ? name[0] : '';
+    lastNameController.text = name.length > 1
+        ? name.sublist(1).join(" ")
+        : '';
   }
 
   Future<void> loadUserData() async {
@@ -111,7 +125,8 @@ class _NewAnimalInfoState
       widget.pet.contactEmail = contactEmail;
       widget.pet.petName =
           "${firstNameController.text} ${lastNameController.text}";
-      widget.pet.petAge = ageYearController.text;
+      widget.pet.petAge =
+          "${ageYearController.text}";
       widget.pet.petGender = petGender;
       widget.pet.breed = breedController.text;
       widget.pet.petSize = petSize;
@@ -119,7 +134,10 @@ class _NewAnimalInfoState
       widget.pet.location =
           "${cityLocController.text}, ${stateLocController.text} ${zipLocController.text}";
       widget.pet.adoptionFee = feeController.text;
-
+      widget.pet.prompt1 =
+          widget.oldPet['Prompt1'].toString();
+      widget.pet.prompt2 =
+          widget.oldPet['Prompt2'].toString();
       List<String> updatedColors =
           List.from(widget.pet.colors);
       if (petColor.isNotEmpty &&
@@ -129,6 +147,81 @@ class _NewAnimalInfoState
       widget.pet.colors = updatedColors;
       widget.pet.type = petType;
     });
+  }
+
+  // void _showDialog(String result, String info) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return CupertinoAlertDialog(
+  //         title: Padding(
+  //           padding: const EdgeInsets.all(16.0),
+  //           child: Text(
+  //             result,
+  //             style: const TextStyle(
+  //                 fontFamily: 'Dm Sans',
+  //                 fontSize: 18),
+  //           ),
+  //         ),
+  //         content: Text(info,
+  //             style: const TextStyle(
+  //                 fontFamily: 'Dm Sans',
+  //                 fontSize: 16)),
+  //         actions: [
+  //           CupertinoButton(
+  //               child: const Icon(
+  //                 Icons.check_circle,
+  //                 color: Color.fromRGBO(
+  //                     255, 106, 146, 1),
+  //                 size: 32,
+  //               ),
+  //               onPressed: () {
+  //                 Navigator.pop(context);
+  //               })
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
+  // WITH API SERVICE
+  Future<void> _editpet(NewPet pet,
+      final Map<String, dynamic> oldPet) async {
+    try {
+      final editResult =
+          await apiService.updatePet(
+              userLogin,
+              oldPet['_id'].toString(),
+              pet.petName,
+              pet.type,
+              pet.type,
+              pet.petGender,
+              pet.colors,
+              pet.breed,
+              petSize,
+              pet.bio,
+              oldPet['Prompt1'].toString(),
+              oldPet['Prompt2'].toString(),
+              pet.contactEmail,
+              pet.location,
+              [],
+              pet.adoptionFee);
+
+      String msg = editResult['message'];
+      if (msg ==
+          'Pet information updated successfully') {
+        // _showDialog(msg, '');
+      }
+      if (msg.isNotEmpty) {
+        if (msg.contains('exists')) {
+          // _showDialog(msg,
+          //     'Please check all the fields needed');
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    _clearAll();
   }
 
   void debugPrintPetData(BuildContext context) {
@@ -206,6 +299,7 @@ class _NewAnimalInfoState
             'lib/assets/animalProfile/animalChipSvgs/other.svg'
       },
     ];
+
     // Pet Sizes List
     List<Map<String, String>> petSizes = [
       {'size': 'Small', 'weight': '0-25 lbs'},
@@ -213,6 +307,7 @@ class _NewAnimalInfoState
       {'size': 'Large', 'weight': '61-100 lbs'},
       {'size': 'X-Large', 'weight': '>101 lbs'},
     ];
+
     // Pet Colors List
     List<String> petColors = [
       "",
@@ -227,6 +322,7 @@ class _NewAnimalInfoState
       "Orange",
       "Pink"
     ];
+
     // Pet Genders List
     List<String> petGenders = [
       "",
@@ -235,6 +331,7 @@ class _NewAnimalInfoState
       "Other",
       "None"
     ];
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -254,9 +351,13 @@ class _NewAnimalInfoState
                     const SizedBox(height: 20),
                     // PET IMAGE, FIRST NAME, LAST NAME
                     PetNameArea(
-                      oldPet: {},
-                      petImage:
-                          'lib/images/Forgot-Password-Cat.png',
+                      oldPet: widget.oldPet,
+                      petImage: widget.oldPet[
+                                  'Images'][0] ==
+                              ''
+                          ? 'lib/images/defaultLogo-pic.jpg'
+                          : widget.oldPet[
+                              'Images'][0],
                       fName: '',
                       firstNameController:
                           firstNameController,
@@ -270,9 +371,12 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: AdoptionFeeField(
-                        feeAmnt: '',
                         feeController:
                             feeController,
+                        feeAmnt: widget.oldPet[
+                                    'AdoptionFee']
+                                ?.toString() ??
+                            '',
                       ),
                     ),
 
@@ -282,7 +386,7 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: PetAgeField(
-                        oldPet: {},
+                        oldPet: widget.oldPet,
                         ageYearController:
                             ageYearController,
                         ageMonthController:
@@ -296,7 +400,7 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: PetLocationField(
-                        oldPet: {},
+                        oldPet: widget.oldPet,
                         cityLocController:
                             cityLocController,
                         stateLocController:
@@ -312,7 +416,7 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: PetBreedField(
-                        oldPet: {},
+                        oldPet: widget.oldPet,
                         breedController:
                             breedController,
                       ),
@@ -324,7 +428,7 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: PetType(
-                        oldPet: {},
+                        oldPet: widget.oldPet,
                         petTypes: petTypes,
                         petType: petType,
                         onChanged:
@@ -342,7 +446,7 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: PetSize(
-                        oldPet: {},
+                        oldPet: widget.oldPet,
                         petSizes: petSizes,
                         petSize: petSize,
                         onChanged:
@@ -431,7 +535,7 @@ class _NewAnimalInfoState
                           EdgeInsets.symmetric(
                               vertical: space),
                       child: LargeTextField(
-                        pet: {},
+                        pet: widget.oldPet,
                         label:
                             "What's the story behind this pet?",
                         placeholder:
@@ -460,19 +564,25 @@ class _NewAnimalInfoState
                       setState(() {
                         _updatePetData();
                       });
+                      _editpet(widget.pet,
+                          widget.oldPet);
                       debugPrintPetData(context);
+
+                      // _editpet(widget.pet,
+                      //     widget.oldPet);
+
                       // Navigate to the next tab
-                      if (widget.tabController
-                              .index <
-                          widget.tabController
-                                  .length -
-                              1) {
-                        widget.tabController
-                            .animateTo(widget
-                                    .tabController
-                                    .index +
-                                1);
-                      }
+                      // if (widget.tabController
+                      //         .index <
+                      //     widget.tabController
+                      //             .length -
+                      //         1) {
+                      //   widget.tabController
+                      //       .animateTo(widget
+                      //               .tabController
+                      //               .index +
+                      //           1);
+                      // }
                     },
                     actionText:
                         'Save Info'.toUpperCase(),

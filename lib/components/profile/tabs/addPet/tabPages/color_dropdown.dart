@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
-  String selected;
-  final void Function(String?)
-      onChanged; // Add this
+  final String selected;
+  final void Function(String?) onChanged;
 
   CustomDropdown({
-    super.key,
+    Key? key,
     required this.items,
     required this.selected,
-    required this.onChanged, // Add this
-  });
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   _CustomDropdownState createState() =>
@@ -21,6 +19,14 @@ class CustomDropdown extends StatefulWidget {
 
 class _CustomDropdownState
     extends State<CustomDropdown> {
+  String? _currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.selected;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,18 +43,17 @@ class _CustomDropdownState
                 borderRadius:
                     BorderRadius.circular(8.0)),
           ),
-          isEmpty: widget.selected == '',
+          isEmpty: _currentValue == null ||
+              _currentValue!.isEmpty,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: widget.selected,
+              value: _currentValue,
               isDense: true,
               onChanged: (String? newValue) {
                 setState(() {
-                  widget.selected =
-                      newValue ?? ''; // Safeguard
+                  _currentValue = newValue;
                 });
-                widget.onChanged(
-                    newValue); // Call the callback
+                widget.onChanged(newValue);
               },
               items: widget.items
                   .map((String value) {
@@ -62,7 +67,7 @@ class _CustomDropdownState
         ),
         const SizedBox(height: 16.0),
         Text(
-          'Selected value: ${widget.selected}',
+          'Selected value: ${_currentValue ?? 'None'}',
           style: const TextStyle(
               fontSize: 16.0, color: Colors.grey),
         ),

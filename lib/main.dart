@@ -53,6 +53,7 @@ class _MyAppState extends State<MyApp> {
             const AuthPage(),
         '/listpetpage': (BuildContext context) =>
             const AddPetPage(),
+
         // '/addanimalpage':
         //     (BuildContext context) =>
         //         const NewAnimalInfo(),

@@ -16,32 +16,39 @@ class ProfileSettings extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 15),
-              const ProfileInfoText(
-                  svgAsset:
-                      'lib/assets/tabSvgs/person.svg',
-                  info: 'Edit Profile'),
-              const ProfileInfoHDivider(),
-              const ProfileInfoText(
-                  svgAsset:
-                      'lib/assets/tabSvgs/person-add.svg',
-                  info: 'View Profile'),
-              const ProfileInfoHDivider(),
-              const ProfileInfoText(
-                  svgAsset:
-                      'lib/assets/tabSvgs/settings.svg',
-                  info: 'Settings'),
-              const SizedBox(height: 100),
-              OutlinedButton(
-                onPressed: () {
-                  apiService.logout();
+              GestureDetector(
+                onTap: () async {
+                  await apiService.logout();
                   ScreenNavigator(cx: context)
                       .navigate(
                           '/welcome',
                           NavigatorTweens
                               .bottomToTop());
                 },
-                child: const Text('Logout'),
+                child: const ProfileInfoText(
+                    svgAsset:
+                        'lib/assets/tabSvgs/person.svg',
+                    info: 'Logout'),
               ),
+
+              const ProfileInfoHDivider(),
+
+              // const ProfileInfoText(
+              //     svgAsset:
+              //         'lib/assets/tabSvgs/settings.svg',
+              //     info: 'Settings'),
+              const SizedBox(height: 100),
+              // OutlinedButton(
+              //   onPressed: () {
+              //     apiService.logout();
+              //     ScreenNavigator(cx: context)
+              //         .navigate(
+              //             '/welcome',
+              //             NavigatorTweens
+              //                 .bottomToTop());
+              //   },
+              //   child: const Text('Logout'),
+              // ),
               const ProfileLogoArea(
                   svgAsset:
                       'lib/assets/swipet.svg',

@@ -8,7 +8,7 @@ class MyButton extends StatelessWidget {
   const MyButton(
       {super.key,
       required this.onPressed,
-      required this.actionText});
+      required this.actionText, required bool loading});
 
   @override
   Widget build(BuildContext context) {

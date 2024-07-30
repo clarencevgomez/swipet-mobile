@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:swipet_mobile/components/animal_card_items/animal_images.dart';
 import 'package:swipet_mobile/components/animal_card_items/info_section.dart';
 
 class AnimalCard extends StatelessWidget {
   final Map<String, dynamic> pet;
   final List<dynamic> images;
+  final String username;
 
   const AnimalCard({
     Key? key,
     required this.pet,
     required this.images,
+    required this.username,
   }) : super(key: key);
 
   @override
@@ -40,8 +41,8 @@ class AnimalCard extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 // FIRST IMAGE
-
-                AnimalImage(image: images[0]),
+                if (_isValidImage(images, 0))
+                  AnimalImage(image: images[0]),
 
                 const SizedBox(height: 10),
 
@@ -63,14 +64,18 @@ class AnimalCard extends StatelessWidget {
                       pet['contactEmail']),
                   adoptionFee: _safeString(
                       pet['adoptionFee']),
-                  username: _safeString(
-                      pet['username']),
+                  username: _safeString(username),
                   p1: _safeString(pet['prompt1']),
                   p2: _safeString(pet['prompt2']),
                 ),
                 const SizedBox(height: 10),
-                AnimalImage(image: images[1]),
+
+                // SECOND IMAGE
+                if (_isValidImage(images, 1))
+                  AnimalImage(image: images[1]),
+
                 const SizedBox(height: 10),
+
                 // PROMPT 1
                 if (_isValidString(
                     pet['prompt1']))
@@ -81,8 +86,13 @@ class AnimalCard extends StatelessWidget {
                         'Why should you adopt me',
                   ),
                 const SizedBox(height: 10),
-                AnimalImage(image: images[2]),
+
+                // THIRD IMAGE
+                if (_isValidImage(images, 2))
+                  AnimalImage(image: images[2]),
+
                 const SizedBox(height: 10),
+
                 // PROMPT 2
                 if (_isValidString(
                     pet['prompt2']))
@@ -109,5 +119,11 @@ class AnimalCard extends StatelessWidget {
     return data != null &&
         data.isNotEmpty &&
         data != 'null';
+  }
+
+  bool _isValidImage(
+      List<dynamic> images, int index) {
+    return images.length > index &&
+        _isValidString(images[index]?.toString());
   }
 }

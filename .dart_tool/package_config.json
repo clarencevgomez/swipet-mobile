@@ -200,6 +200,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_slidable",
+      "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/flutter_slidable-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_svg",
       "rootUri": "file:///Users/clarencegomez/.pub-cache/hosted/pub.dev/flutter_svg-2.0.10+1",
       "packageUri": "lib/",
@@ -608,7 +614,7 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2024-07-28T03:44:50.119117Z",
+  "generated": "2024-07-30T06:09:33.980835Z",
   "generator": "pub",
   "generatorVersion": "3.4.3",
   "flutterRoot": "file:///Users/clarencegomez/flutter",

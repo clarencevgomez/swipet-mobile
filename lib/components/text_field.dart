@@ -13,7 +13,7 @@ class MyTextField extends StatelessWidget {
       required this.next,
       required this.placeholder,
       required this.controller,
-      required this.obscureText});
+      required this.obscureText, required String? Function(dynamic value) validator});
 
   @override
   Widget build(BuildContext context) {

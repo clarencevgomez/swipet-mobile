@@ -4,6 +4,7 @@ import 'package:swipet_mobile/components/profile/profile_image.dart';
 
 // ignore: must_be_immutable
 class PetNameArea extends StatelessWidget {
+  final Map<String, dynamic> oldPet;
   final String petImage;
   final String fName;
   String? lName;
@@ -17,7 +18,20 @@ class PetNameArea extends StatelessWidget {
     this.lName,
     required this.firstNameController,
     required this.lastNameController,
-  });
+    required this.oldPet,
+  }) {
+    if (oldPet['Pet_Name'] != null &&
+        oldPet['Pet_Name'].isNotEmpty) {
+      var fullName =
+          oldPet['Pet_Name'].split(" ");
+      firstNameController.text = fullName[0];
+
+      lastNameController.text =
+          (fullName.length > 1)
+              ? fullName[1]
+              : '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +60,7 @@ class PetNameArea extends StatelessWidget {
                                   .size
                                   .width -
                               20,
+                      onChanged: (value) {},
                     ),
                     // Last Name
                     MyAnimalTextField(
@@ -61,6 +76,7 @@ class PetNameArea extends StatelessWidget {
                                   .size
                                   .width -
                               20,
+                      onChanged: (value) {},
                     ),
                   ],
                 ),
@@ -73,16 +89,23 @@ class PetNameArea extends StatelessWidget {
   }
 }
 
-// ignore: must be immutable
+// ignore: must_be_immutable
 class AdoptionFeeField extends StatelessWidget {
+  Map<String, dynamic>? oldPet;
   final String feeAmnt;
   final TextEditingController feeController;
 
-  const AdoptionFeeField({
+  AdoptionFeeField({
     super.key,
     required this.feeAmnt,
     required this.feeController,
-  });
+    this.oldPet,
+  }) {
+    if (oldPet?['AdoptionFee'] != null &&
+        oldPet?['AdoptionFee'].isNotEmpty) {
+      feeController.text = oldPet?['AdoptionFee'];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,15 +127,16 @@ class AdoptionFeeField extends StatelessWidget {
                 ),
                 Expanded(
                   child: MyAnimalTextField(
-                      placeholder: 'Adoption Fee',
-                      controller: feeController,
-                      obscureText: false,
-                      height: 50,
-                      horizontal: 0,
-                      width:
-                          MediaQuery.of(context)
-                              .size
-                              .width),
+                    placeholder: 'Adoption Fee',
+                    controller: feeController,
+                    obscureText: false,
+                    height: 50,
+                    horizontal: 0,
+                    width: MediaQuery.of(context)
+                        .size
+                        .width,
+                    onChanged: (value) {},
+                  ),
                 ),
               ],
             ),

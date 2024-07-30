@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:swipet_mobile/components/animal_card_items/animal_images.dart';
-import 'package:swipet_mobile/components/animal_card_items/vertical_divider.dart';
 import 'package:swipet_mobile/components/profile/profile_button.dart';
 import 'package:swipet_mobile/dbHelper/api_service.dart';
+import 'package:swipet_mobile/pages/list_pages/pet_listing_info.dart'; // Add this import
 
 class UserListings extends StatefulWidget {
   const UserListings({super.key});
@@ -23,6 +19,7 @@ class _UserListingsState
   String userName = '';
   int totalListings = 0;
   List<dynamic> listings = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -45,8 +42,11 @@ class _UserListingsState
         userName = decodedToken['username'] ??
             'Unknown User';
       });
-      _getListings(userName);
+      await _getListings(userName);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> _getListings(
@@ -71,14 +71,18 @@ class _UserListingsState
       } else {
         String message = listResults['message'] ??
             'Failed to retrieve Listings';
-        ScaffoldMessenger.of(context)
-            .showSnackBar(
-                SnackBar(content: Text(message)));
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //         SnackBar(content: Text(message)));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())));
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text(e.toString())));
     }
+  }
+
+  void _refreshListings() {
+    _getListings(userName);
   }
 
   @override
@@ -111,32 +115,32 @@ class _UserListingsState
                 ),
               ),
               Expanded(
-                child: listings.isEmpty
+                child: isLoading
                     ? const Center(
-                        child: Text(
-                            "No listings available"))
-                    : SingleChildScrollView(
-                        child: Column(
-                          children:
-                              listings.map((pet) {
-                            var petName = pet[
-                                        'Pet_Name']
-                                    ?.toString() ??
-                                'Unnamed Pet';
-                            var petImg = pet[
-                                            'Images'] !=
-                                        null &&
-                                    pet['Images']
-                                        .isNotEmpty
-                                ? pet['Images'][0]
-                                    .toString()
-                                : 'lib/images/defaultLogo-pic.jpg';
-                            return PetListingInfo(
-                                image: petImg,
-                                info: petName);
-                          }).toList(),
-                        ),
-                      ),
+                        child:
+                            CircularProgressIndicator())
+                    : listings.isEmpty
+                        ? const Center(
+                            child: Text(
+                                "No listings available"))
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                ...listings
+                                    .map((pet) {
+                                  return PetListingInfo(
+                                      onPetDeleted:
+                                          _refreshListings,
+                                      pet: pet
+                                      // Pass the callback function
+                                      );
+                                }).toList(),
+                                SizedBox(
+                                    height:
+                                        150), // Extra space at the bottom
+                              ],
+                            ),
+                          ),
               ),
             ],
           ),
@@ -161,78 +165,6 @@ class _UserListingsState
           ),
         ],
       ),
-    );
-  }
-}
-
-// Information Displayed
-class PetListingInfo extends StatelessWidget {
-  final String image;
-  final String info;
-
-  const PetListingInfo({
-    super.key,
-    required this.image,
-    required this.info,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment:
-              CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context)
-                        .size
-                        .width /
-                    20),
-            ListAnimalImage(image: image),
-            const SizedBox(width: 10),
-            Text(
-              info,
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: -0.1),
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  'lib/assets/tabSvgs/edit.svg',
-                  width: 24,
-                  height: 24,
-                  colorFilter:
-                      const ColorFilter.mode(
-                    Colors.black,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                const SizedBox(width: 25),
-                SvgPicture.asset(
-                  'lib/assets/tabSvgs/delete.svg',
-                  width: 20,
-                  height: 20,
-                  colorFilter:
-                      const ColorFilter.mode(
-                    Colors.black,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                SizedBox(
-                    width: MediaQuery.of(context)
-                            .size
-                            .width /
-                        20),
-              ],
-            ),
-          ],
-        ),
-        const ProfileInfoHDivider()
-      ],
     );
   }
 }

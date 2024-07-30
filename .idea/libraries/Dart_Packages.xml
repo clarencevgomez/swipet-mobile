@@ -82,7 +82,7 @@
         <entry key="cross_file">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cross_file-0.3.3+7/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cross_file-0.3.4+1/lib" />
             </list>
           </value>
         </entry>
@@ -166,7 +166,7 @@
         <entry key="flutter">
           <value>
             <list>
-              <option value="/opt/homebrew/Caskroom/flutter/3.22.2/flutter/packages/flutter/lib" />
+              <option value="$USER_HOME$/flutter/packages/flutter/lib" />
             </list>
           </value>
         </entry>
@@ -233,6 +233,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_slidable">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_slidable-3.1.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_svg">
           <value>
             <list>
@@ -243,14 +250,14 @@
         <entry key="flutter_test">
           <value>
             <list>
-              <option value="/opt/homebrew/Caskroom/flutter/3.22.2/flutter/packages/flutter_test/lib" />
+              <option value="$USER_HOME$/flutter/packages/flutter_test/lib" />
             </list>
           </value>
         </entry>
         <entry key="flutter_web_plugins">
           <value>
             <list>
-              <option value="/opt/homebrew/Caskroom/flutter/3.22.2/flutter/packages/flutter_web_plugins/lib" />
+              <option value="$USER_HOME$/flutter/packages/flutter_web_plugins/lib" />
             </list>
           </value>
         </entry>
@@ -285,7 +292,7 @@
         <entry key="image_picker_for_web">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.2/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.4/lib" />
             </list>
           </value>
         </entry>
@@ -558,7 +565,7 @@
         <entry key="sky_engine">
           <value>
             <list>
-              <option value="/opt/homebrew/Caskroom/flutter/3.22.2/flutter/bin/cache/pkg/sky_engine/lib" />
+              <option value="$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib" />
             </list>
           </value>
         </entry>
@@ -677,7 +684,7 @@
         <entry key="web">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web-1.0.0/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.5.1/lib" />
             </list>
           </value>
         </entry>
@@ -716,7 +723,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/clock-1.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/collection-1.18.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/convert-3.1.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cross_file-0.3.3+7/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cross_file-0.3.4+1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/crypto-3.0.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.8/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/decimal-2.3.3/lib" />
@@ -737,12 +744,13 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_secure_storage_platform_interface-1.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_secure_storage_web-1.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_secure_storage_windows-3.1.2/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_slidable-3.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_svg-2.0.10+1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/http-1.2.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/http_parser-4.0.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker-1.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+7/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.2/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.12/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.1+1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.1+1/lib" />
@@ -797,14 +805,14 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vector_math-2.1.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-14.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vy_string_utils-0.4.6/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-1.0.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.5.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/win32-5.5.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xdg_directories-1.0.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xml-6.5.0/lib" />
-      <root url="file:///opt/homebrew/Caskroom/flutter/3.22.2/flutter/bin/cache/pkg/sky_engine/lib" />
-      <root url="file:///opt/homebrew/Caskroom/flutter/3.22.2/flutter/packages/flutter/lib" />
-      <root url="file:///opt/homebrew/Caskroom/flutter/3.22.2/flutter/packages/flutter_test/lib" />
-      <root url="file:///opt/homebrew/Caskroom/flutter/3.22.2/flutter/packages/flutter_web_plugins/lib" />
+      <root url="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib" />
+      <root url="file://$USER_HOME$/flutter/packages/flutter/lib" />
+      <root url="file://$USER_HOME$/flutter/packages/flutter_test/lib" />
+      <root url="file://$USER_HOME$/flutter/packages/flutter_web_plugins/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

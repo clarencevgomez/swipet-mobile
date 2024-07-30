@@ -49,12 +49,12 @@ class _LoginPageState extends State<LoginPage> {
         String? user = decoded['username'];
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(
-          SnackBar(
-              content: Text(
-                  "Successful Login! $user")),
-        );
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //   SnackBar(
+        //       content: Text(
+        //           "Successful Login! $user")),
+        // );
 
         ScreenNavigator(cx: context).navigate(
           '/swipepage',
@@ -150,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller:
                           usernameController,
                       obscureText: false,
+                      validator: (value) {},
                     ),
                   ),
                   MyTextField(
@@ -158,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller:
                         passwordController,
                     obscureText: true,
+                    validator: (value) {},
                   ),
                   MyButton(
                     onPressed: () {
@@ -167,6 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                               .text);
                     },
                     actionText: 'Login',
+                    loading: isLoading,
                   ),
                   Row(
                     mainAxisAlignment:

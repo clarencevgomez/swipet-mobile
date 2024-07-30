@@ -118,20 +118,13 @@ class _AnimalProfileImageState
     extends State<AnimalProfileImage> {
   int index = 0;
   final Random random = Random();
-  Uint8List? _animalImage;
+  final String baseUrl =
+      'https://swipet-becad9ab7362.herokuapp.com/'; // Replace
 
   @override
   void initState() {
     super.initState();
     changeIndex();
-  }
-
-  Future<void> _selectImage() async {
-    Uint8List img =
-        await pickImage(ImageSource.gallery);
-    setState(() {
-      _animalImage = img;
-    });
   }
 
   void changeIndex() {
@@ -145,17 +138,15 @@ class _AnimalProfileImageState
       const Color.fromRGBO(242, 162, 155, 1),
       const Color.fromRGBO(242, 142, 163, 1),
     ];
-    String imageUrl = widget.image.isNotEmpty
-        ? widget.image
-        : 'lib/images/defaultLogo-pic.jpg';
+    String imageUrl =
+        'lib/images/defaultLogo-pic.jpg';
 
     ImageProvider imageProvider;
-    if (_animalImage != null) {
-      imageProvider = MemoryImage(_animalImage!);
-    } else if (imageUrl.startsWith('http')) {
-      imageProvider = NetworkImage(imageUrl);
-    } else {
-      imageProvider = AssetImage(imageUrl);
+    if (widget.image.startsWith('http')) {
+      imageUrl = widget.image;
+    } else if (widget.image
+        .startsWith('uploads/petImages')) {
+      imageUrl = '$baseUrl${widget.image}';
     }
 
     return Stack(
@@ -189,23 +180,27 @@ class _AnimalProfileImageState
                   fit: BoxFit.cover,
                   alignment:
                       FractionalOffset.center,
-                  image: imageProvider,
+                  image:
+                      imageUrl.startsWith('http')
+                          ? NetworkImage(imageUrl)
+                          : AssetImage(imageUrl)
+                              as ImageProvider,
                 ),
               ),
             ),
           ),
         ),
-        Positioned(
-          bottom: -8,
-          right: -11,
-          child: IconButton(
-            onPressed: _selectImage,
-            icon: const Icon(
-              Icons.add_a_photo_rounded,
-              color: Colors.black,
-            ),
-          ),
-        ),
+        // Positioned(
+        //   bottom: -8,
+        //   right: -11,
+        //   child: IconButton(
+        //     onPressed: _selectImage,
+        //     icon: const Icon(
+        //       Icons.add_a_photo_rounded,
+        //       color: Colors.black,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

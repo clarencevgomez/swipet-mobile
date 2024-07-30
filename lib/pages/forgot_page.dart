@@ -88,6 +88,7 @@ class _ForgotKeyPageState
                   controller:
                       oldPasswordController,
                   obscureText: true,
+                  validator: (value) {},
                 ),
               ),
               // New password input field
@@ -96,6 +97,7 @@ class _ForgotKeyPageState
                 placeholder: 'New Password*',
                 controller: newPasswordController,
                 obscureText: true,
+                validator: (value) {},
               ),
               // Confirm New Password Field
               MyTextField(
@@ -105,6 +107,7 @@ class _ForgotKeyPageState
                 controller:
                     confirmPasswordController,
                 obscureText: true,
+                validator: (value) {},
               ),
               // Action Button
               StartButton(

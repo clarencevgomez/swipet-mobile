@@ -17,6 +17,7 @@ class AnimalInfoCard extends StatelessWidget {
   final String username;
   final String p1;
   final String p2;
+
   const AnimalInfoCard({
     super.key,
     this.age = 'N/A',
@@ -45,11 +46,11 @@ class AnimalInfoCard extends StatelessWidget {
         : 'female';
   }
 
-  String isUserEmpty(String owner) {
-    return owner.toLowerCase() == 'null'
-        ? 'N/A'
-        : owner;
-  }
+  // String isUserEmpty(String owner) {
+  //   return owner.toLowerCase() == 'null'
+  //       ? ''
+  //       : owner;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -141,8 +142,7 @@ class AnimalInfoCard extends StatelessWidget {
                 InfoText(
                   svgAsset:
                       'lib/assets/postcard-heart.svg',
-                  info:
-                      'Listed by ${isUserEmpty(username)}',
+                  info: 'Listed by $username',
                 ),
               ],
             ),

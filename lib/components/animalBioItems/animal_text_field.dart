@@ -17,7 +17,7 @@ class MyAnimalTextField extends StatelessWidget {
     this.width = double
         .infinity, // Set default width to infinity
     this.height = 60.0,
-    this.horizontal = 50, // Set default height
+    this.horizontal = 50, required Null Function(dynamic value) onChanged, // Set default height
   });
 
   @override

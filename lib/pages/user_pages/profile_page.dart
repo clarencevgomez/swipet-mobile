@@ -104,7 +104,7 @@ class _ProfilePageState
             const ProfileImage(
                 image:
                     'lib/images/defaultCat.jpg'),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Text(
               userName,
               style: const TextStyle(
@@ -127,7 +127,7 @@ class _ProfilePageState
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: 80,
+              height: 10,
               width: MediaQuery.of(context)
                   .size
                   .width,

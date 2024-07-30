@@ -19,6 +19,13 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  String SignResult = '';
+  String errors = '';
+  bool _isLoading = false;
+
+  final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>();
+
   final signUpUsernameController =
       TextEditingController();
   final signUpEmailController =
@@ -36,7 +43,6 @@ class _SignupPageState extends State<SignupPage> {
 
   final ApiService apiService = ApiService();
 
-// WITH API SERVICE
   Future<void> _register(
     String firstName,
     String lastName,
@@ -46,6 +52,14 @@ class _SignupPageState extends State<SignupPage> {
     String password,
     String phoneNumber,
   ) async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final result = await apiService.register(
           firstName,
@@ -56,23 +70,26 @@ class _SignupPageState extends State<SignupPage> {
           username,
           password);
       String msg = result['message'];
+
       if (msg.isNotEmpty) {
         if (msg.contains('exists')) {
-          _showDialog(msg,
-              'Please use a different username');
+          SignResult =
+              'Please use a different username';
         } else {
-          _showDialog(msg, '');
+          setState(() {
+            SignResult = msg;
+          });
         }
       }
     } catch (e) {
       print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
-    // ignore: use_build_context_synchronously
-
     _clearAll();
   }
-
-  // NEW USER FUNCTION
 
   void _clearAll() {
     firstNameController.clear();
@@ -81,7 +98,7 @@ class _SignupPageState extends State<SignupPage> {
     signUpEmailController.clear();
     signUpLocationController.clear();
     signUpPasswordController.clear();
-     signUpConfirmPasswordController.clear();
+    signUpConfirmPasswordController.clear();
   }
 
   void _showDialog(String result, String info) {
@@ -104,15 +121,16 @@ class _SignupPageState extends State<SignupPage> {
                   fontSize: 16)),
           actions: [
             CupertinoButton(
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Color.fromRGBO(
-                      255, 106, 146, 1),
-                  size: 32,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                })
+              child: const Icon(
+                Icons.check_circle,
+                color: Color.fromRGBO(
+                    255, 106, 146, 1),
+                size: 32,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
           ],
         );
       },
@@ -147,140 +165,237 @@ class _SignupPageState extends State<SignupPage> {
             colors: [
               Color.fromRGBO(242, 145, 163, 1),
               Color.fromRGBO(242, 145, 163, 1),
-              Colors.white
+              Colors.white,
             ],
           ),
         ),
         child: SingleChildScrollView(
           child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 175),
-                const ActionHeader(
-                  imagePath:
-                      'lib/images/sign-upp-cat.png',
-                  actionText: "Sign Up",
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 30),
-                  child: Row(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  const ActionHeader(
+                    imagePath:
+                        'lib/images/sign-upp-cat.png',
+                    actionText: "Sign Up",
+                  ),
+                  Text(
+                    SignResult,
+                    style: const TextStyle(
+                      color: Color.fromARGB(
+                          255, 255, 255, 255),
+                      fontSize: 22,
+                      letterSpacing: -0.4,
+                    ),
+                  ),
+                  Text(
+                    errors,
+                    style: const TextStyle(
+                      color: Color.fromARGB(
+                          255, 255, 67, 67),
+                      fontSize: 22,
+                      letterSpacing: -0.4,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(
+                            top: 30),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets
+                                    .only(
+                                    left: 50,
+                                    right: 5),
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment
+                                      .start,
+                              children: [
+                                NameTextField(
+                                  next: Icons
+                                      .camera_front_rounded,
+                                  placeholder:
+                                      "First Name",
+                                  controller:
+                                      firstNameController,
+                                  obscureText:
+                                      false,
+                                  validator:
+                                      (value) {},
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets
+                                    .only(
+                                    right: 50),
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment
+                                      .start,
+                              children: [
+                                NameTextField(
+                                  next: Icons
+                                      .video_camera_front_outlined,
+                                  placeholder:
+                                      "Last Name",
+                                  controller:
+                                      lastNameController,
+                                  obscureText:
+                                      false,
+                                  validator:
+                                      (value) {},
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets
-                                  .only(
-                                  left: 50,
-                                  right: 5),
-                          child: NameTextField(
-                            next: Icons
-                                .camera_front_rounded,
-                            placeholder:
-                                "First Name*",
-                            controller:
-                                firstNameController,
-                            obscureText: false,
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets
-                                  .only(
-                                  right: 50),
-                          child: NameTextField(
-                            next: Icons
-                                .video_camera_front_outlined,
-                            placeholder:
-                                "Last Name*",
-                            controller:
-                                lastNameController,
-                            obscureText: false,
-                          ),
-                        ),
+                      MyTextField(
+                        next:
+                            Icons.person_outline,
+                        placeholder: 'Username*',
+                        controller:
+                            signUpUsernameController,
+                        obscureText: false,
+                        validator: (value) {},
                       ),
                     ],
                   ),
-                ),
-
-                MyTextField(
-                  next: Icons.person_outline,
-                  placeholder: 'Username*',
-                  controller:
-                      signUpUsernameController,
-                  obscureText: false,
-                ),
-                // First Name Input Controller
-
-                MyTextField(
-                  next:
-                      Icons.alternate_email_sharp,
-                  placeholder: 'Email Address*',
-                  controller:
-                      signUpEmailController,
-                  obscureText: false,
-                ),
-                MyTextField(
-                  next:
-                      Icons.location_on_outlined,
-                  placeholder: 'Location*',
-                  controller:
-                      signUpLocationController,
-                  obscureText: false,
-                ),
-                MyTextField(
-                  next: Icons.lock_open_outlined,
-                  placeholder: 'Password*',
-                  controller:
-                      signUpPasswordController,
-                  obscureText: true,
-                ),
-                MyTextField(
-                  next: Icons.lock_outline,
-                  placeholder:
-                      'Confirm Password*',
-                  controller:
-                      signUpConfirmPasswordController,
-                  obscureText: true,
-                ),
-                MyButton(
-                  onPressed: () {
-                    _register(
-                      firstNameController.text,
-                      lastNameController.text,
-                      signUpUsernameController
-                          .text,
-                      signUpEmailController.text,
-                      signUpLocationController
-                          .text,
-                      signUpConfirmPasswordController
-                          .text,
-                      "000 000 0000",
-                    );
-                  },
-                  actionText: 'Sign Up',
-                ),
-                ActionFooter(
-                  page: '/login',
-                  description:
-                      "Have an Account?\t",
-                  actionText: "Login",
-                  animation: NavigatorTweens
-                      .topToBottom(),
-                ),
-                const ResetPassword(),
-                OutlinedButton(
-                  onPressed: _fakeData,
-                  child: const Text(
-                    "Generate Data",
-                    style: TextStyle(
-                        color: Colors.black),
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                    children: [
+                      MyTextField(
+                        next: Icons
+                            .alternate_email_sharp,
+                        placeholder:
+                            'Email Address*',
+                        controller:
+                            signUpEmailController,
+                        obscureText: false,
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty) {
+                            return 'Email is required';
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 120),
-              ],
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                    children: [
+                      MyTextField(
+                        next: Icons
+                            .location_on_outlined,
+                        placeholder: 'Location',
+                        controller:
+                            signUpLocationController,
+                        obscureText: false,
+                        validator: (value) {},
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                    children: [
+                      MyTextField(
+                        next: Icons
+                            .lock_open_outlined,
+                        placeholder: 'Password*',
+                        controller:
+                            signUpPasswordController,
+                        obscureText: true,
+                        validator: (value) {},
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                    children: [
+                      MyTextField(
+                        next: Icons.lock_outline,
+                        placeholder:
+                            'Confirm Password*',
+                        controller:
+                            signUpConfirmPasswordController,
+                        obscureText: true,
+                        validator: (value) {},
+                      ),
+                    ],
+                  ),
+                  MyButton(
+                    onPressed: () {
+                      if (signUpPasswordController
+                                  .text.length >=
+                              6 &&
+                          signUpPasswordController
+                                  .text ==
+                              signUpConfirmPasswordController
+                                  .text) {
+                        _register(
+                          firstNameController
+                              .text,
+                          lastNameController.text,
+                          signUpUsernameController
+                              .text,
+                          signUpEmailController
+                              .text,
+                          signUpLocationController
+                              .text,
+                          signUpConfirmPasswordController
+                              .text,
+                          "000 000 0000",
+                        );
+                      } else {
+                        setState(() {
+                          errors =
+                              'Password needs to be 6+ characters';
+                        });
+                      }
+                    },
+                    actionText: 'Sign Up',
+                    loading: _isLoading,
+                  ),
+                  ActionFooter(
+                    page: '/login',
+                    description:
+                        "Have an Account?\t",
+                    actionText: "Login",
+                    animation: NavigatorTweens
+                        .topToBottom(),
+                  ),
+                  const ResetPassword(),
+                  OutlinedButton(
+                    onPressed: _fakeData,
+                    child: const Text(
+                      "Generate Data",
+                      style: TextStyle(
+                          color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

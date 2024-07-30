@@ -1,33 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:swipet_mobile/components/profile/profile_button.dart';
 import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/animalFields/animal_bio.dart';
 import 'package:swipet_mobile/dbHelper/api_service.dart';
 import 'package:swipet_mobile/objects/newPetModel.dart';
 
-class AnimalPrompts extends StatefulWidget {
+class EditAnimalPrompts extends StatefulWidget {
+  final Map<String, dynamic> oldPet;
   final NewPet pet;
-  const AnimalPrompts({
+  final String userLogin;
+
+  const EditAnimalPrompts({
     super.key,
     required this.pet,
+    required this.oldPet,
+    required this.userLogin,
   });
 
   @override
-  State<AnimalPrompts> createState() =>
-      _AnimalPromptsState();
+  State<EditAnimalPrompts> createState() =>
+      _EditAnimalPromptsState();
 }
 
-class _AnimalPromptsState
-    extends State<AnimalPrompts> {
-  // Name
+class _EditAnimalPromptsState
+    extends State<EditAnimalPrompts> {
   final prompt1Controller =
       TextEditingController();
   final prompt2Controller =
       TextEditingController();
-
+  final feeController = TextEditingController();
   final ApiService apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    prompt1Controller.text =
+        widget.oldPet['Prompt1'] ?? '';
+    prompt2Controller.text =
+        widget.oldPet['Prompt2'] ?? '';
+    feeController.text = widget
+            .oldPet['AdoptionFee']
+            ?.toString() ??
+        '';
+  }
+
   // void _showDialog(String result, String info) {
   //   showDialog(
   //     context: context,
@@ -48,74 +66,56 @@ class _AnimalPromptsState
   //                 fontSize: 16)),
   //         actions: [
   //           CupertinoButton(
-  //               child: const Icon(
-  //                 Icons.check_circle,
-  //                 color: Color.fromRGBO(
-  //                     255, 106, 146, 1),
-  //                 size: 32,
-  //               ),
-  //               onPressed: () {
-  //                 Navigator.pop(context);
-  //               })
+  //             child: const Icon(
+  //               Icons.check_circle,
+  //               color: Color.fromRGBO(
+  //                   255, 106, 146, 1),
+  //               size: 32,
+  //             ),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //           ),
   //         ],
   //       );
   //     },
   //   );
   // }
 
-  Future<void> _getUserEmail(NewPet pet) async {
+  Future<void> _editPet(NewPet pet,
+      final Map<String, dynamic> oldPet) async {
     try {
-      final token = await apiService.getToken();
+      final editResult =
+          await apiService.updatePet(
+        pet.userLogin,
+        oldPet['_id'].toString(),
+        pet.petName,
+        pet.type,
+        pet.petAge,
+        pet.petGender,
+        [],
+        pet.breed,
+        pet.petSize,
+        pet.bio,
+        pet.prompt1,
+        pet.prompt2,
+        pet.contactEmail,
+        pet.location,
+        [],
+        pet.adoptionFee,
+      );
 
-      if (token != null) {
-        Map<String, dynamic> decoded =
-            JwtDecoder.decode(token);
-        String? email = decoded['email'];
-        setState(() {
-          widget.pet.contactEmail = email!;
-        });
-        if (!mounted) return;
-
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(SnackBar(
-        //         content: Text(
-        //             "Successful Retrieval of! email: $email")));
-        ;
-      }
-    } catch (e) {}
-  }
-
-  // WITH API SERVICE
-  Future<void> _addPet(NewPet pet) async {
-    try {
-      final result = await apiService.addPet(
-          pet.userLogin,
-          pet.petName,
-          pet.type,
-          pet.petAge,
-          pet.petGender,
-          pet.colors,
-          pet.breed,
-          pet.petSize,
-          pet.bio,
-          pet.prompt1,
-          pet.prompt2,
-          pet.contactEmail,
-          pet.location,
-          pet.images, // FIX LATER
-          pet.adoptionFee);
-      _getUserEmail(pet);
-      String msg = result['message'];
-      if (msg.isNotEmpty) {
-        if (msg.contains('exists')) {
-          // _showDialog(msg,
-          // 'Please check all the fields needed');
-        } else {
-          // _showDialog(msg, '');
-        }
+      String msg = editResult['message'];
+      if (msg ==
+          'Pet information updated successfully') {
+        // _showDialog(msg, '');
+      } else if (msg.isNotEmpty &&
+          msg.contains('exists')) {
+        // _showDialog(msg,
+        //     'Please check all the fields needed');
       }
     } catch (e) {
-      print(e.toString());
+      // _showDialog('Error', e.toString());
     }
     _clearAll();
   }
@@ -123,10 +123,36 @@ class _AnimalPromptsState
   void _clearAll() {
     prompt1Controller.clear();
     prompt2Controller.clear();
+    feeController.clear();
   }
 
   void _updatePetData() {
     setState(() {
+      widget.pet.userLogin =
+          widget.oldPet['username'].toString();
+      widget.pet.contactEmail = widget
+          .oldPet['Contact_Email']
+          .toString();
+      widget.pet.petName =
+          widget.oldPet['Pet_Name'].toString();
+      widget.pet.petAge =
+          widget.oldPet['Age'].toString();
+      widget.pet.petGender =
+          widget.oldPet['Gender'].toString();
+      widget.pet.breed =
+          widget.oldPet['Breed'].toString();
+      widget.pet.petSize =
+          widget.oldPet['Size'].toString();
+      widget.pet.bio =
+          widget.oldPet['Bio'].toString();
+      widget.pet.location =
+          widget.oldPet['Location'].toString();
+      widget.pet.adoptionFee = feeController.text;
+
+      List<String> updatedColors = [];
+      widget.pet.colors = updatedColors;
+      widget.pet.type =
+          widget.oldPet['Pet_Type'].toString();
       widget.pet.prompt1 = prompt1Controller.text;
       widget.pet.prompt2 = prompt2Controller.text;
     });
@@ -191,85 +217,83 @@ class _AnimalPromptsState
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Stack(
-        children: [
-          SingleChildScrollView(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
               padding: const EdgeInsets.only(
                   bottom:
                       80.0), // Enough space for the floating button
               child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(
-                          horizontal: 16.0),
-                  child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start,
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        PromptBanner(
-                          asset1:
-                              'lib/assets/animalProfile/promptSvgs/sparkles.svg',
-                          asset2:
-                              'lib/assets/animalProfile/promptSvgs/star.svg',
-                          title:
-                              'Write some prompts for your pet!',
-                          description:
-                              'Make sure to include prompts for your pet so potential\nsoulmates can get to know them better!',
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        LargeTextField(
-                            pet: {},
-                            placeholder:
-                                '<150 words',
-                            label:
-                                "Why should you adopt me?",
-                            controller:
-                                prompt1Controller),
-                        LargeTextField(
-                            pet: {},
-                            placeholder:
-                                '<150 words',
-                            label:
-                                "My favorite thing(s) to do are?",
-                            controller:
-                                prompt2Controller),
-                        const SizedBox(
-                          height: 200,
-                        )
-                      ]))),
-          Positioned(
-            bottom: -0,
-            left: 16,
-            right: 16,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ProfileButton(
-                  backgroundColor:
-                      const Color.fromRGBO(
-                          242, 145, 163, 1),
-                  svgAsset: '',
-                  onPressed: () {
-                    setState(() {
-                      _updatePetData();
-                    });
-                    debugPrintPetData(context);
-                    _addPet(widget.pet);
-                  },
-                  actionText:
-                      'Add Pet'.toUpperCase(),
+                padding:
+                    const EdgeInsets.symmetric(
+                        horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    PromptBanner(
+                      asset1:
+                          'lib/assets/animalProfile/promptSvgs/sparkles.svg',
+                      asset2:
+                          'lib/assets/animalProfile/promptSvgs/star.svg',
+                      title:
+                          'Write some prompts for your pet!',
+                      description:
+                          'Make sure to include prompts for your pet so potential\nsoulmates can get to know them better!',
+                    ),
+                    const SizedBox(height: 20),
+                    LargeTextField(
+                      pet: {},
+                      placeholder: '<150 words',
+                      label:
+                          "Why should you adopt me?",
+                      controller:
+                          prompt1Controller,
+                    ),
+                    LargeTextField(
+                      pet: {},
+                      placeholder: '<150 words',
+                      label:
+                          "My favorite thing(s) to do are?",
+                      controller:
+                          prompt2Controller,
+                    ),
+                    const SizedBox(height: 200),
+                  ],
                 ),
-                const SizedBox(height: 15),
-              ],
+              ),
             ),
-          ),
-        ],
-      )),
+            Positioned(
+              bottom: -0,
+              left: 16,
+              right: 16,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ProfileButton(
+                    backgroundColor:
+                        const Color.fromRGBO(
+                            242, 145, 163, 1),
+                    svgAsset: '',
+                    onPressed: () {
+                      _updatePetData();
+                      _editPet(widget.pet,
+                          widget.oldPet);
+                      debugPrintPetData(context);
+                      Navigator.pushNamed(context,
+                          '/userListings'); // Navigate to UserListings
+                    },
+                    actionText: 'SAVE CHANGES'
+                        .toUpperCase(),
+                  ),
+                  const SizedBox(height: 15),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -18,6 +18,16 @@ class ProfileTabs extends StatelessWidget {
             indicatorPadding: EdgeInsets.zero,
             labelPadding: EdgeInsets.zero,
             tabs: [
+              Tab(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 25),
+                  child: TabName(
+                      svgAsset:
+                          'lib/assets/appheaders/house-listing.svg',
+                      name: 'Your Listings'),
+                ),
+              ),
               Padding(
                 padding:
                     EdgeInsets.only(left: 0.0),
@@ -25,16 +35,6 @@ class ProfileTabs extends StatelessWidget {
                     child: TabName(
                         name:
                             'Profile Information')),
-              ),
-              Tab(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 40),
-                  child: TabName(
-                      svgAsset:
-                          'lib/assets/appheaders/house-listing.svg',
-                      name: 'Your Listings'),
-                ),
               ),
             ],
           ),
@@ -45,8 +45,8 @@ class ProfileTabs extends StatelessWidget {
                 2.2, // Set a height to prevent overflow
             child: const TabBarView(
               children: [
+                UserListings(),
                 ProfileSettings(),
-                UserListings()
               ],
             ),
           ),

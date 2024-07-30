@@ -1,23 +1,49 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:swipet_mobile/components/profile/profile_tab.dart';
-import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/animal_prompts.dart';
-import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/new_animal_info.dart';
-import 'package:swipet_mobile/components/profile/tabs/addPet/tabPages/upload_animal_photo.dart';
+import 'package:swipet_mobile/components/profile/tabs/editPet/tabs/page1.dart';
+import 'package:swipet_mobile/components/profile/tabs/editPet/tabs/page3.dart';
 import 'package:swipet_mobile/objects/newPetModel.dart';
 
-class AddPetPage extends StatefulWidget {
-  const AddPetPage({super.key});
+class EditPetPage extends StatefulWidget {
+  final Map<String, dynamic> pet;
+  EditPetPage({super.key, required this.pet});
 
   @override
-  State<AddPetPage> createState() =>
-      _AddPetPageState();
+  State<EditPetPage> createState() =>
+      _EditPetPageState();
 }
 
-class _AddPetPageState extends State<AddPetPage> {
-  NewPet newPet = NewPet();
-  final TextEditingController feeController =
-      TextEditingController();
+class _EditPetPageState
+    extends State<EditPetPage> {
+  NewPet newPetInfo = NewPet();
+  String userName = '';
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    const FlutterSecureStorage storage =
+        FlutterSecureStorage();
+    String? token =
+        await storage.read(key: 'jwtToken');
+    if (token != null) {
+      Map<String, dynamic> decodedToken =
+          JwtDecoder.decode(token);
+      if (kDebugMode) {
+        print(": $decodedToken");
+      }
+      setState(() {
+        userName = decodedToken['username'] ??
+            'Unknown User';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +75,8 @@ class _AddPetPageState extends State<AddPetPage> {
                 ),
               ),
             ),
-            const Text(
-              ' Your Listings',
+            Text(
+              '${widget.pet['Pet_Name']} Information',
               style: TextStyle(
                 fontSize: 24,
                 fontFamily: 'Recoleta',
@@ -63,7 +89,7 @@ class _AddPetPageState extends State<AddPetPage> {
         titleSpacing: 10,
       ),
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Builder(
           builder: (context) {
             final TabController tabController =
@@ -94,23 +120,6 @@ class _AddPetPageState extends State<AddPetPage> {
                     ),
                     Tab(
                       child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(
-                          horizontal:
-                              MediaQuery.of(
-                                          context)
-                                      .size
-                                      .width *
-                                  1 /
-                                  36,
-                        ),
-                        child: const TabName(
-                            name:
-                                'Upload Photos'),
-                      ),
-                    ),
-                    Tab(
-                      child: Padding(
                         padding: EdgeInsets.only(
                           left: MediaQuery.of(
                                       context)
@@ -128,16 +137,15 @@ class _AddPetPageState extends State<AddPetPage> {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      NewAnimalInfo(
-                          pet: newPet,
+                      EditAnimalInfo(
+                          pet: newPetInfo,
+                          oldPet: widget.pet,
                           tabController:
                               tabController),
-                      UploadAnimalPhoto(
-                          pet: newPet,
-                          tabController:
-                              tabController),
-                      AnimalPrompts(
-                        pet: newPet,
+                      EditAnimalPrompts(
+                        oldPet: widget.pet,
+                        pet: newPetInfo,
+                        userLogin: userName,
                       ),
                     ],
                   ),

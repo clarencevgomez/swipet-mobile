@@ -7,13 +7,15 @@ class NameTextField extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final TextEditingController controller;
   final bool obscureText;
+  final String? Function(String?) validator;
 
   const NameTextField(
       {super.key,
       required this.next,
       required this.placeholder,
       required this.controller,
-      required this.obscureText});
+      required this.obscureText,
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {

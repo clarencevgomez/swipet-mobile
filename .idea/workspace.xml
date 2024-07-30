@@ -11,12 +11,28 @@
   <component name="ChangeListManager">
     <list default="true" id="212e307f-9fc0-4c41-bb13-8b81d60581af" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app_test_lol_android.iml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app_test_lol_android.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_test_lol.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app_test_lol.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/animal_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/animal_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/animal_card_items/animal_images.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/animal_card_items/animal_images.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/animal_card_items/info_section.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/animal_card_items/info_section.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/profile_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/profile_tab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/animal_bio.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/animal_bio.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/animal_chip_filters.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/animal_chip_filters.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/animal_name_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/animal_name_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/pet_fields.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animalFields/pet_fields.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animal_prompts.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/animal_prompts.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/color_dropdown.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/color_dropdown.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/new_animal_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/addPet/tabPages/new_animal_info.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/profile/tabs/tab2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/profile/tabs/tab2.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/user_pages/favorite_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/user_pages/favorite_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/user_pages/swipe_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/user_pages/swipe_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +79,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "Flutter.main.dart.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
