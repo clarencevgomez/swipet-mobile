@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swipet_mobile/components/animal_card_items/animal_images.dart';
+import 'package:swipet_mobile/components/animal_card_items/my_text_button.dart';
 import 'package:swipet_mobile/components/animal_card_items/vertical_divider.dart';
 import 'package:swipet_mobile/components/profile/tabs/editPet/edit_pet_page.dart';
 import 'package:swipet_mobile/dbHelper/api_service.dart';
@@ -86,6 +87,41 @@ class PetListingInfo extends StatelessWidget {
       }
     }
 
+    void _deletePetDialog(String userLogin,
+        String petId, String petName) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            width:
+                MediaQuery.of(context).size.width,
+            child: CupertinoAlertDialog(
+                title: Column(
+                  children: [
+                    // MatchImage(image: image),
+                    Text(
+                      "Are you SURE you want to delete $petName?",
+                      style:
+                          TextStyle(fontSize: 32),
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  MyTextButton(
+                      text: 'yes'.toUpperCase(),
+                      function: () {
+                        _deletePet(userLogin,
+                            petId, petName);
+                      }),
+                  MyTextButton(
+                      text: 'No'.toUpperCase(),
+                      function: () {}),
+                ]),
+          );
+        },
+      );
+    }
+
     return Column(
       children: [
         Row(
@@ -138,10 +174,14 @@ class PetListingInfo extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    _deletePet(
+                    _deletePetDialog(
                         pet['username'],
                         pet['_id'],
                         pet['Pet_Name']);
+                    // _deletePet(
+                    //     pet['username'],
+                    //     pet['_id'],
+                    //     pet['Pet_Name']);
                   },
                   icon: SvgPicture.asset(
                     'lib/assets/tabSvgs/delete.svg',

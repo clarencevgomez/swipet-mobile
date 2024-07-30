@@ -121,8 +121,8 @@ class _EditAnimalPhotoState
                               242, 145, 163, 1),
                       svgAsset: '',
                       onPressed: () {
-                        debugPrintPetData(
-                            context);
+                        // debugPrintPetData(
+                        //     context);
                         if (widget.tabController
                                 .index <
                             widget.tabController
@@ -147,64 +147,65 @@ class _EditAnimalPhotoState
     );
   }
 
-  void debugPrintPetData(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Pet Data'),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                    'User Login: ${widget.pet.userLogin}'),
-                Text(
-                    'Pet Name: ${widget.pet.petName}'),
-                Text('Type: ${widget.pet.type}'),
-                Text(
-                    'Pet Age: ${widget.pet.petAge}'),
-                Text(
-                    'Pet Gender: ${widget.pet.petGender}'),
-                Text(
-                    'Colors: ${widget.pet.colors.join(', ')}'),
-                Text(
-                    'Breed: ${widget.pet.breed}'),
-                Text(
-                    'Pet Size: ${widget.pet.petSize}'),
-                Text('Bio: ${widget.pet.bio}'),
-                Text(
-                    'Prompt 1: ${widget.pet.prompt1}'),
-                Text(
-                    'Prompt 2: ${widget.pet.prompt2}'),
-                Text(
-                    'Contact Email: ${widget.pet.contactEmail}'),
-                Text(
-                    'Location: ${widget.pet.location}'),
-                Text('Images:'),
-                Row(
-                  children: widget.pet.images
-                      .map((url) {
-                    return Image.file(url,
-                        height: 100, width: 100);
-                  }).toList(),
-                ),
-                Text(
-                    'Adoption Fee: ${widget.pet.adoptionFee}'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+//   void debugPrintPetData(BuildContext context) {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text('Pet Data'),
+//           content: SingleChildScrollView(
+//             child: Column(
+//               crossAxisAlignment:
+//                   CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                     'User Login: ${widget.pet.userLogin}'),
+//                 Text(
+//                     'Pet Name: ${widget.pet.petName}'),
+//                 Text('Type: ${widget.pet.type}'),
+//                 Text(
+//                     'Pet Age: ${widget.pet.petAge}'),
+//                 Text(
+//                     'Pet Gender: ${widget.pet.petGender}'),
+//                 Text(
+//                     'Colors: ${widget.pet.colors.join(', ')}'),
+//                 Text(
+//                     'Breed: ${widget.pet.breed}'),
+//                 Text(
+//                     'Pet Size: ${widget.pet.petSize}'),
+//                 Text('Bio: ${widget.pet.bio}'),
+//                 Text(
+//                     'Prompt 1: ${widget.pet.prompt1}'),
+//                 Text(
+//                     'Prompt 2: ${widget.pet.prompt2}'),
+//                 Text(
+//                     'Contact Email: ${widget.pet.contactEmail}'),
+//                 Text(
+//                     'Location: ${widget.pet.location}'),
+//                 Text('Images:'),
+//                 Row(
+//                   children: widget.pet.images
+//                       .map((url) {
+//                     return Image.file(url,
+//                         height: 100, width: 100);
+//                   }).toList(),
+//                 ),
+//                 Text(
+//                     'Adoption Fee: ${widget.pet.adoptionFee}'),
+//               ],
+//             ),
+//           ),
+//           actions: <Widget>[
+//             TextButton(
+//               child: const Text('OK'),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+// }
 }

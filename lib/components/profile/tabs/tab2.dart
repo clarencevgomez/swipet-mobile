@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:swipet_mobile/components/animal_card_items/animal_images.dart';
+import 'package:swipet_mobile/components/animal_card_items/my_text_button.dart';
 import 'package:swipet_mobile/components/profile/profile_button.dart';
 import 'package:swipet_mobile/dbHelper/api_service.dart';
 import 'package:swipet_mobile/pages/list_pages/pet_listing_info.dart'; // Add this import

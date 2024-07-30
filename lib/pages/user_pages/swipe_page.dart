@@ -312,12 +312,12 @@ class _SwipePageState extends State<SwipePage> {
         ),
         automaticallyImplyLeading: false,
         titleSpacing: 5,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: _toggleSearchForm,
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.search),
+        //     onPressed: _toggleSearchForm,
+        //   ),
+        // ],
       ),
       body: SafeArea(
         child: Stack(

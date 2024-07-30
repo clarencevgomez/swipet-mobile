@@ -132,60 +132,60 @@ class _AnimalPromptsState
     });
   }
 
-  void debugPrintPetData(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Pet Data'),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                    'User Login: ${widget.pet.userLogin}'),
-                Text(
-                    'Pet Name: ${widget.pet.petName}'),
-                Text('Type: ${widget.pet.type}'),
-                Text(
-                    'Pet Age: ${widget.pet.petAge}'),
-                Text(
-                    'Pet Gender: ${widget.pet.petGender}'),
-                Text(
-                    'Colors: ${widget.pet.colors.join(', ')}'),
-                Text(
-                    'Breed: ${widget.pet.breed}'),
-                Text(
-                    'Pet Size: ${widget.pet.petSize}'),
-                Text('Bio: ${widget.pet.bio}'),
-                Text(
-                    'Prompt 1: ${widget.pet.prompt1}'),
-                Text(
-                    'Prompt 2: ${widget.pet.prompt2}'),
-                Text(
-                    'Contact Email: ${widget.pet.contactEmail}'),
-                Text(
-                    'Location: ${widget.pet.location}'),
-                Text(
-                    'Images: ${widget.pet.images.join(', ')}'),
-                Text(
-                    'Adoption Fee: ${widget.pet.adoptionFee}'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void debugPrintPetData(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Pet Data'),
+  //         content: SingleChildScrollView(
+  //           child: Column(
+  //             crossAxisAlignment:
+  //                 CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                   'User Login: ${widget.pet.userLogin}'),
+  //               Text(
+  //                   'Pet Name: ${widget.pet.petName}'),
+  //               Text('Type: ${widget.pet.type}'),
+  //               Text(
+  //                   'Pet Age: ${widget.pet.petAge}'),
+  //               Text(
+  //                   'Pet Gender: ${widget.pet.petGender}'),
+  //               Text(
+  //                   'Colors: ${widget.pet.colors.join(', ')}'),
+  //               Text(
+  //                   'Breed: ${widget.pet.breed}'),
+  //               Text(
+  //                   'Pet Size: ${widget.pet.petSize}'),
+  //               Text('Bio: ${widget.pet.bio}'),
+  //               Text(
+  //                   'Prompt 1: ${widget.pet.prompt1}'),
+  //               Text(
+  //                   'Prompt 2: ${widget.pet.prompt2}'),
+  //               Text(
+  //                   'Contact Email: ${widget.pet.contactEmail}'),
+  //               Text(
+  //                   'Location: ${widget.pet.location}'),
+  //               Text(
+  //                   'Images: ${widget.pet.images.join(', ')}'),
+  //               Text(
+  //                   'Adoption Fee: ${widget.pet.adoptionFee}'),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('OK'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -258,8 +258,11 @@ class _AnimalPromptsState
                     setState(() {
                       _updatePetData();
                     });
-                    debugPrintPetData(context);
+                    // debugPrintPetData(context);
                     _addPet(widget.pet);
+
+                    Navigator.pushNamed(
+                        context, '/profilepage');
                   },
                   actionText:
                       'Add Pet'.toUpperCase(),

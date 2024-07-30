@@ -367,10 +367,14 @@ class _SignupPageState extends State<SignupPage> {
                               .text,
                           "000 000 0000",
                         );
+                        setState(() {
+                          errors = '';
+                        });
                       } else {
                         setState(() {
                           errors =
                               'Password needs to be 6+ characters';
+                          SignResult = '';
                         });
                       }
                     },
@@ -386,14 +390,17 @@ class _SignupPageState extends State<SignupPage> {
                         .topToBottom(),
                   ),
                   const ResetPassword(),
-                  OutlinedButton(
-                    onPressed: _fakeData,
-                    child: const Text(
-                      "Generate Data",
-                      style: TextStyle(
-                          color: Colors.black),
-                    ),
-                  ),
+                  SizedBox(
+                    height: 20,
+                  )
+                  // OutlinedButton(
+                  //   onPressed: _fakeData,
+                  //   child: const Text(
+                  //     "Generate Data",
+                  //     style: TextStyle(
+                  //         color: Colors.black),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
